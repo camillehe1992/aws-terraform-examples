@@ -36,11 +36,10 @@ init: check_env
 		-backend-config="bucket=$(STATE_BUCKET)" \
 		-backend-config="region=$(AWS_REGION)" \
 		-backend-config="profile=$(AWS_PROFILE)" \
-		-backend-config="key=$(NICKNAME)/$(ENVIRONMENT)/$(AWS_REGION)/terraform.tfstate" \
+		-backend-config="key=$(NICKNAME)/$(ENVIRONMENT)/$(AWS_REGION)/terraform.tfstate"
 
 plan: init
 	$(info [*] Plan Terrafrom Infra)
-	echo MY_SECRET ${MY_SECRET}
 	@$(TF) plan -var-file $(VAR_FILE) \
 		-var="aws_profile=${AWS_PROFILE}" \
 		-var="database_password=${DATABASE_PASSWORD}" \

@@ -36,7 +36,7 @@ output = json
 ```
 
 ## Deploy via CICD Pipelines
-Before triggering the GitHub workflow from GitHub console, you should add secrets in GitHub console. In the demo, we add three secrets as below. `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are used for Terraform infrastructure deployment. `TF_VAR_DATABASE_PASSWORD` is the secure token we need to save in Secret Manager.
+Before triggering the GitHub workflow from GitHub console, you should add secrets in GitHub console. In the demo, I created a `Environment` named `dev` add three secrets and two variables in it. `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are used for Terraform infrastructure deployment. `TF_VAR_DATABASE_PASSWORD` is the secure token we need to save in Secret Manager.
 
 > `DATABASE_PASSWORD` is prefixed with `TF_VAR_` to distinguish Terraform secure variables with workflow secrets
 
@@ -45,9 +45,14 @@ Secrets:
 - AWS_SECRET_ACCESS_KEY
 - TF_VAR_DATABASE_PASSWORD
 
+Variables:
+- AWS_REGION
+- AWS_ACCOUNT
+
 Then trigger the workflow manually from GitHub console.
 
 ## Reference
 - https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
 - https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions
+- https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-an-environment
 - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret
