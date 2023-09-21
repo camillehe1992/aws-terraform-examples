@@ -16,7 +16,7 @@ $(info NICKNAME    		= $(NICKNAME))
 
 STATE_BUCKET := tf-state-$(AWS_ACCOUNT)-$(AWS_REGION)
 AWS_PROFILE := service.app-deployment-${ENVIRONMENT}-ci-bot
-VAR_FILE := $(BASE)/terraform.tfvars
+VAR_FILE := $(BASE)/tf_$(ENVIRONMENT).tfvars
 
 $(info STATE_BUCKET 	= $(STATE_BUCKET))
 $(info AWS_PROFILE 		= $(AWS_PROFILE))
@@ -47,7 +47,7 @@ plan: init
 
 plan-destroy: init
 	$(info [*] Plan Terrafrom Infra - Destroy)
-	@$(TF) plan -destroy -var-file terraform/environments/$(ENVIRONMENT)/terraform.tfvars -out tfplan
+	@$(TF) plan -destroy -var-file $(VAR_FILE) -out tfplan
 
 apply: plan
 	$(info [*] Apply Terrafrom Infra)
