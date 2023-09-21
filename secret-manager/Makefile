@@ -30,7 +30,7 @@ lint:
 check_env:
 	$(info [*] Check Terraform Environmets)
 
-init:
+init: check_env
 	$(info [*] Init Terrafrom Infra)
 	@$(TF) init -reconfigure \
 		-backend-config="bucket=$(STATE_BUCKET)" \
