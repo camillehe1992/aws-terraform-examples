@@ -35,7 +35,7 @@ region = cn-north-1
 output = json
 ```
 
-## Deploy via CICD Pipelines
+## Deploy via GitHub Actions Workflow
 Before triggering the GitHub workflow from GitHub console, you should add secrets in GitHub console. In the demo, I created a `Environment` named `dev` add three secrets and two variables in it. `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are used for Terraform infrastructure deployment. `TF_VAR_DATABASE_PASSWORD` is the secure token we need to save in Secret Manager.
 
 > `DATABASE_PASSWORD` is prefixed with `TF_VAR_` to distinguish Terraform secure variables with workflow secrets
@@ -49,7 +49,14 @@ Variables:
 - AWS_REGION
 - AWS_ACCOUNT
 
-Then trigger the workflow manually from GitHub console.
+Then trigger the [workflow](../.github/workflows/secret-manager-apply.yaml) manually from GitHub console.
+
+- Choose the target environment to deploy. Currently only dev is available.
+- Check `True to destroy` checkbox if you want to destory the resources.
+- Check `True to force` checkbox if you want to apply refresh the secure tokens. Useful when there is no change in Terraform infra, but there is a variables or secrets update in Github Settings. 
+
+![GitHub Actions Workflow](./images//workflow.png)
+
 
 ## Reference
 - https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
