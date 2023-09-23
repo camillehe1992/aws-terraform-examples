@@ -16,7 +16,7 @@ In a real project, we need to save sensitive information, such as password, secr
 │       ├── outputs.tf
 │       └── variables.tf
 ├── outputs.tf                  # outputs of terraform
-├── terraform.tfvars            # variables of terraform
+├── tf_dev.tfvars            # variables of terraform
 ├── variables.tf                # variables definition of terraform
 └── versions.tf                 # terraform backend configuration and provider versions
 ```
@@ -25,13 +25,13 @@ In a real project, we need to save sensitive information, such as password, secr
 Firstly, you must have Terraform CLI installed with `required_version = ">= 1.3.4"`. Then, install AWS CLI and setup AWS credentials in your local machine. The crednetial should have access to create secrets in AWS Secret Manager. You should have two files created under `.aws` folder after configured. 
 ```bash
 # ~/.aws/credentials
-[service.app-deployment-dev-ci-bot]
+[app-deployer]
 aws_access_key_id = <aws_access_key_id>
 aws_secret_access_key = <aws_access_key_id>
 
 # ~/.aws/config
-[profile service.app-deployment-dev-ci-bot]
-region = cn-north-1
+[profile app-deployer]
+region = ap-southeast-1
 output = json
 ```
 
@@ -48,6 +48,7 @@ Secrets:
 Variables:
 - AWS_REGION
 - AWS_ACCOUNT
+- STATE_BUCKET
 
 Then trigger the [workflow](../.github/workflows/secret-manager-apply.yaml) manually from GitHub console.
 
