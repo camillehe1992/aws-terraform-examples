@@ -16,47 +16,32 @@ In a real project, we need to save sensitive information, such as password, secr
 │       ├── outputs.tf
 │       └── variables.tf
 ├── outputs.tf                  # outputs of terraform
-├── tf_dev.tfvars            # variables of terraform
+├── tf_dev.tfvars               # variables of terraform
 ├── variables.tf                # variables definition of terraform
 └── versions.tf                 # terraform backend configuration and provider versions
 ```
 
 ## Deploy from Local
-Firstly, you must have Terraform CLI installed with `required_version = ">= 1.3.4"`. Then, install AWS CLI and setup AWS credentials in your local machine. The crednetial should have access to create secrets in AWS Secret Manager. You should have two files created under `.aws` folder after configured. 
-```bash
-# ~/.aws/credentials
-[app-deployer]
-aws_access_key_id = <aws_access_key_id>
-aws_secret_access_key = <aws_access_key_id>
 
-# ~/.aws/config
-[profile app-deployer]
-region = ap-southeast-1
-output = json
+Follow [README](../README.md) to setup local enviroment for Terraform deployment. Then under `secret-manager` directory, run below commands to deploy current project into AWS account. 
+
+```bash
+make init
+
+make plan
+
+make apply
 ```
 
 ## Deploy via GitHub Actions Workflow
-Before triggering the GitHub workflow from GitHub console, you should add secrets in GitHub console. In the demo, I created a `Environment` named `dev` add three secrets and two variables in it. `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are used for Terraform infrastructure deployment. `TF_VAR_DATABASE_PASSWORD` is the secure token we need to save in Secret Manager.
 
-> `DATABASE_PASSWORD` is prefixed with `TF_VAR_` to distinguish Terraform secure variables with workflow secrets
+Before triggering the GitHub workflow from GitHub console, goto [Setup GitHub Environment for GitHub Actions Workflows](../README.md#setup-github-environment-for-github-actions-workflows) to setup Github Actions environment.
 
-Secrets:
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
-- TF_VAR_DATABASE_PASSWORD
+Besides, add another seceret named `TF_VAR_DATABASE_PASSWORD` which is the secure token we need to save into AWS Secrets Manager.
 
-Variables:
-- AWS_REGION
-- AWS_ACCOUNT
-- STATE_BUCKET
+> `DATABASE_PASSWORD` is prefixed with `TF_VAR_` to distinguish Terraform secure variables with workflow secrets.
 
 Then trigger the [workflow](../.github/workflows/secret-manager-apply.yaml) manually from GitHub console.
-
-- Choose the target environment to deploy. Currently only dev is available.
-- Check `True to destroy` checkbox if you want to destory the resources.
-- Check `True to force` checkbox if you want to apply refresh the secure tokens. Useful when there is no change in Terraform infra, but there is a variables or secrets update in Github Settings. 
-
-![GitHub Actions Workflow](./images//workflow.png)
 
 
 ## Reference
