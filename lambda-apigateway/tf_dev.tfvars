@@ -1,14 +1,12 @@
 # General Deployment Variables
 env      = "dev"
-nickname = "ec2instance"
+nickname = "lambdaapigateway"
 
 tags = {
   environment      = "dev"
-  nickname         = "ec2instance"
-  application_name = "ec2-instance"
-  application_desc = "Deploy EC2 Instance with the given instance type"
+  nickname         = "lambdaapigateway"
+  application_name = "lambda-apigateway"
+  application_desc = "Deploy a simple serverless project based on Lambda and API Gateway"
   emails           = "group@example.com"
   repo             = "https://github.com/camillehe1992/aws-terraform-examples"
 }
-
-# key_name = "order-data-source"

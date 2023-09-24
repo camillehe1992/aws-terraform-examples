@@ -1,11 +1,13 @@
 # General Deployment Variables
 env      = "dev"
-nickname = "secretmanagerdemo"
+nickname = "secretmanager"
 
 tags = {
   environment      = "dev"
-  nickname         = "secretmanagerdemo"
-  emails           = "group@example.com"
+  nickname         = "secretmanager"
+  application_name = "secret-manager"
   application_name = "Deploy Serects from GitHub Actions secret to Serects Manager"
+  emails           = "group@example.com"
+  repo             = "https://github.com/camillehe1992/aws-terraform-examples"
 }
 
