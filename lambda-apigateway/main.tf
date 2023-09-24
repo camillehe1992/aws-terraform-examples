@@ -24,7 +24,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "${aws_apigatewayv2_api.this.name}-exec-role"
+  name = "${aws_lambda_function.this.function_name}-exec-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
