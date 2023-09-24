@@ -161,3 +161,4 @@ terraform.rc
 **/terraform.tfstate.*.backup
 **/.terraform
 **/tfplan
+/**/*.zip

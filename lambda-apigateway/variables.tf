@@ -37,3 +37,9 @@ variable "runtime" {
   description = "The runtime of Lambda function"
   default     = "python3.9"
 }
+
+variable "retention_in_days" {
+  type        = number
+  description = "The rentention time of CloudWatch Logs group in days"
+  default     = 7
+}

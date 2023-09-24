@@ -10,6 +10,7 @@ data "archive_file" "function_source" {
 // Lambda Function
 resource "aws_lambda_function" "this" {
   function_name    = "${var.env}-${var.nickname}-${var.function_name}"
+  filename         = "${path.module}/${var.function_name}.zip"
   runtime          = var.runtime
   handler          = "main.lambda_handler"
   source_code_hash = data.archive_file.function_source.output_base64sha256
@@ -20,11 +21,11 @@ resource "aws_lambda_function" "this" {
 
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/lambda/${aws_lambda_function.this.function_name}"
-  retention_in_days = 7
+  retention_in_days = var.retention_in_days
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "${aws_lambda_function.this.function_name}-exec-role"
+  name = "${var.env}-${var.nickname}-${var.function_name}-exec-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -42,13 +43,10 @@ resource "aws_iam_role" "lambda_exec" {
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
   role       = aws_iam_role.lambda_exec.name
-  policy_arn = "arn:${data.aws_partition.current.value}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  policy_arn = "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 # API Gateway
-
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api
-
 resource "aws_apigatewayv2_api" "this" {
   name          = "${aws_lambda_function.this.function_name}-gateway"
   protocol_type = "HTTP"
@@ -59,7 +57,7 @@ resource "aws_apigatewayv2_api" "this" {
 resource "aws_apigatewayv2_stage" "this" {
   api_id = aws_apigatewayv2_api.this.id
 
-  name        = "v1"
+  name        = "$default"
   auto_deploy = true
 
   access_log_settings {
@@ -81,7 +79,7 @@ resource "aws_apigatewayv2_stage" "this" {
   }
 }
 
-resource "aws_apigatewayv2_integration" "hello_world" {
+resource "aws_apigatewayv2_integration" "this" {
   api_id = aws_apigatewayv2_api.this.id
 
   integration_uri    = aws_lambda_function.this.invoke_arn
@@ -98,7 +96,7 @@ resource "aws_apigatewayv2_route" "this" {
 
 resource "aws_cloudwatch_log_group" "api_gw" {
   name              = "/aws/api_gw/${aws_apigatewayv2_api.this.name}"
-  retention_in_days = 7
+  retention_in_days = var.retention_in_days
 }
 
 resource "aws_lambda_permission" "api_gw" {
@@ -106,6 +104,5 @@ resource "aws_lambda_permission" "api_gw" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.this.function_name
   principal     = "apigateway.amazonaws.com"
-
-  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+  source_arn    = "${aws_apigatewayv2_api.this.execution_arn}/*/*"
 }
