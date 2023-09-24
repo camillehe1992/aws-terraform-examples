@@ -103,7 +103,7 @@ Run the target workflow manually from GitHub console.
 - Check `True to destroy` checkbox if you want to destory the resources.
 - Check `True to force` checkbox if you want to apply refresh the secure tokens. Useful when there is no change in Terraform infra, but there is a variables or secrets update in Github Settings. 
 
-![GitHub Actions Workflow](./images/workflow.png)
+![GitHub Actions Workflow](./02-images/workflow.png)
 
 ## Reference
 - https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
