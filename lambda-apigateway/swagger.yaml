@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: Swagger Hello World
+  license:
+    name: MIT
+paths:
+  /hello:
+    get:
+      summary: Hello world
+      operationId: hello
+      responses:
+        '200':
+          description: Hello world
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseBody"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+        uri: arn:$${AWS::Partition}:apigateway:$${AWS::Region}:lambda:path/2015-03-31/functions/arn:$${AWS::Partition}:lambda:$${AWS::Region}:$${AWS::AccountId}:function:${function_name}/invocations
+        passthroughBehavior: when_no_match
+        httpMethod: POST
+        type: aws_proxy
+
+components:
+  schemas:
+    ResponseBody:
+      type: object
+      required:
+        - statusCode
+        - body
+      properties:
+        statusCode:
+          type: number
+        body:
+          type: string

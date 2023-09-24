@@ -43,3 +43,31 @@ variable "retention_in_days" {
   description = "The rentention time of CloudWatch Logs group in days"
   default     = 7
 }
+
+# API Gateway
+variable "openapi_json_file" {
+  type        = string
+  description = "The path of OpenAPI specification of API Gateway Rest API"
+  default     = "swagger.yaml"
+}
+
+variable "stage_name" {
+  type        = string
+  default     = "v1"
+  description = "The stage name of API Gateway Rest API"
+}
+
+variable "rest_api_name" {
+  type        = string
+  default     = "hello-world"
+  description = "The name of API Gateway Rest API"
+}
+
+variable "api_gateway_log_retention_days" {
+  type        = number
+  default     = 7
+  description = <<EOF
+    Specifies the number of days you want to retain log events in the specific api gateway log group.
+    Possible values are: 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, and 3653
+  EOF
+}
