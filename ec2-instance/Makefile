@@ -41,7 +41,6 @@ plan: init
 	@$(TF) plan -var-file $(VAR_FILE) \
 		-var="aws_profile=${AWS_PROFILE}" \
 		-var="aws_region=${AWS_REGION}" \
-		-var="database_password=${DATABASE_PASSWORD}" \
 		-out tfplan
 
 plan-destroy: init
@@ -49,7 +48,6 @@ plan-destroy: init
 	@$(TF) plan -destroy -var-file $(VAR_FILE) \
 		-var="aws_profile=${AWS_PROFILE}" \
 		-var="aws_region=${AWS_REGION}" \
-		-var="database_password=${DATABASE_PASSWORD}" \
 		-out tfplan
 
 apply: plan
