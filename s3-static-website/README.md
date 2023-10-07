@@ -19,7 +19,7 @@ make apply
 # 
 # Outputs:
 # 
-# website_endpoint = "s3-website.dev.s3-website-ap-southeast-1.amazonaws.com"
+# website_endpoint = "camille-s3-website.s3-website-ap-southeast-1.amazonaws.com"
 ```
 At this point, you will get `404 Not Found` if access the website via `website_endpoint` as above. After static content get uploaded to bucket, you should get the rendered content after refresh the page.
 

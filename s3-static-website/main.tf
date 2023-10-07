@@ -1,6 +1,6 @@
 
 resource "aws_s3_bucket" "this" {
-  bucket = local.bucket_name
+  bucket = var.static_bucket_name
   tags   = var.tags
 }
 

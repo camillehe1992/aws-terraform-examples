@@ -23,6 +23,6 @@ variable "tags" {
 # Project Specific Variables
 variable "static_bucket_name" {
   type        = string
-  default     = "s3-website"
+  default     = "camille-s3-website"
   description = "The name of S3 bucket for static website hosting"
 }
