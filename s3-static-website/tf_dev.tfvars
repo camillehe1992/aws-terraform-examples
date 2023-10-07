@@ -1,14 +1,12 @@
 # General Deployment Variables
-env      = "dev"
-nickname = "REPLACE_ME"
-
+env = "dev"
 tags = {
   environment      = "dev"
-  nickname         = "REPLACE_ME"
-  application_name = "REPLACE_ME"
-  application_desc = "REPLACE_ME"
+  nickname         = "s3staticwebsite"
+  application_name = "S3 Static Website Hosting"
+  application_desc = "Using AWS S3 and Hugo to Create and Host a Static Website"
   emails           = "group@example.com"
-  repo             = "https://github.com/camillehe1992/aws-terraform-examples"
+  repo             = "https://github.com/camillehe1992/static-website-using-docsy-in-aws-s3"
 }
 
 # Project Specific Variables
