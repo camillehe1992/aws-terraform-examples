@@ -50,10 +50,10 @@ plan-destroy: init
 		-var="aws_region=${AWS_REGION}" \
 		-out tfplan
 
-apply: plan
+apply: init
 	$(info [*] Apply Terrafrom Infra)
 	@$(TF) apply tfplan
 
-apply-destroy: plan-destroy
+apply-destroy: init
 	$(info [*] Apply Terrafrom Infra - Destroy)
 	@$(TF) apply tfplan
