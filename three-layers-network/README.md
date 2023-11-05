@@ -1,5 +1,17 @@
-A application template
+A demo project to create a three layers network infrastructure in AWS following AWS Well-Archtected and best practice. The detail archtecture shows as below diagram. 
+
+In the diagram, we created one VPC with internet gateway to allow internet access. In the VPC, there are two public subnets and two private subnets which distributed in different availablity zones. Three security groups are created for different layers, load balancer, application and database layers. 
+
+A Main route table is created automatically with implicit private subnet association. Besides, we created a custom route table with explicit public subnet association. For each public subnet, We added a route in the custom route table from public subnet to internet gateway.
+
+Three Security groups are created for different purposes in order to the best practice for network access control. Security group ELB is created to secure Elastic Load Balancer with public access enabled. Security group APP is used to secure applications, web servers, etc that run in EC2 instances or other compute resources. It only allows ingress traffic from Security group ELB. Security group Data is for database resources, for example, RDS instances. It only allows ingress traffic from Security group APP.
+
+It's best practice to manage your applications in the public cloud with restricted network access control for security and management.
 ___
+
+## Archtecuture Diagram
+
+![Archtecuture Diagram](arch-diagram.png)
 
 ## Local Deploy
 Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 

@@ -26,3 +26,17 @@ variable "tags" {
 }
 
 # Project Specific Variables
+variable "vpc_cidr_block" {
+  type        = string
+  description = "The CIDR of VPC"
+}
+
+variable "private_subnet_cidrs" {
+  type        = set(string)
+  description = "The list of CIDR of Private Subnet"
+}
+
+variable "public_subnet_cidrs" {
+  type        = set(string)
+  description = "The list of CIDR of Public Subnet"
+}

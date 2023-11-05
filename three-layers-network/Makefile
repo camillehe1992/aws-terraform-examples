@@ -9,7 +9,6 @@ PIP ?= pip
 TF ?= terraform
 MAKE ?= make
 
-AWS_PROFILE := app-deployer
 VAR_FILE := $(BASE)/tf_$(ENVIRONMENT).tfvars
 
 $(info AWS_ACCOUNT 		= $(AWS_ACCOUNT))
