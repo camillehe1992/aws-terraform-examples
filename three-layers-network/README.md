@@ -2,7 +2,9 @@ A demo project to create a three layers network infrastructure in AWS following 
 
 In the diagram, we created one VPC with internet gateway to allow internet access. In the VPC, there are two public subnets and two private subnets which distributed in different availablity zones. Three security groups are created for different layers, load balancer, application and database layers. 
 
-A Main route table is created automatically with implicit private subnet association. Besides, we created a custom route table with explicit public subnet association. For each public subnet, We added a route in the custom route table from public subnet to internet gateway.
+A Main route table is created automatically with implicit private subnet association. Besides, we created a custom route table with explicit public subnet association. For each public subnet, We added a route in the custom route table from public subnets to internet gateway.
+
+In some scenarios, instances in private subnets should have internet access, that is why NAT gateway comes into place. In each public subnet, we setup a NAT gateway, so that the traffic from private subnets can be routed to the internet through NAT gateway.
 
 Three Security groups are created for different purposes in order to the best practice for network access control. Security group ELB is created to secure Elastic Load Balancer with public access enabled. Security group APP is used to secure applications, web servers, etc that run in EC2 instances or other compute resources. It only allows ingress traffic from Security group ELB. Security group Data is for database resources, for example, RDS instances. It only allows ingress traffic from Security group APP.
 
@@ -40,3 +42,5 @@ make apply-destroy
 ```
 
 ## References
+- https://docs.aws.amazon.com/vpc/latest/userguide/how-it-works.html
+- https://dev.betterdoc.org/infrastructure/2020/02/04/setting-up-a-nat-gateway-on-aws-using-terraform.html

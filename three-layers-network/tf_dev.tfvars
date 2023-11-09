@@ -12,6 +12,6 @@ tags = {
 }
 
 # Project Specific Variables
-vpc_cidr_block       = "172.2.0.0/16"
-private_subnet_cidrs = ["172.2.0.0/24", "172.2.64.0/24"]
-public_subnet_cidrs  = ["172.2.128.0/24", "172.2.192.0/24"]
+vpc_cidr_block       = "10.8.0.0/16"
+private_subnet_cidrs = ["10.8.0.0/24", "10.8.64.0/24"]
+public_subnet_cidrs  = ["10.8.128.0/24", "10.8.192.0/24"]

@@ -12,21 +12,45 @@ resource "aws_internet_gateway" "this" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/subnet
 resource "aws_subnet" "private" {
-  for_each = var.private_subnet_cidrs
+  for_each = local.private_subnet_cidrs
 
-  vpc_id     = aws_vpc.this.id
-  cidr_block = each.value
+  availability_zone = data.aws_availability_zones.available.names[each.key]
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value
 
   tags = merge({ Name = "${var.env}-${var.nickname}-private-${each.key}" }, var.tags)
 }
 
 resource "aws_subnet" "public" {
-  for_each = var.public_subnet_cidrs
+  for_each = local.public_subnet_cidrs
 
-  vpc_id     = aws_vpc.this.id
-  cidr_block = each.value
+  availability_zone = data.aws_availability_zones.available.names[each.key]
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = each.value
 
   tags = merge({ Name = "${var.env}-${var.nickname}-public-${each.key}" }, var.tags)
+}
+
+resource "aws_eip" "this" {
+  for_each = local.public_subnet_cidrs
+
+  domain = "vpc"
+
+  tags = merge({ Name = "${var.env}-${var.nickname}-eip-${each.key}-${each.value}" }, var.tags)
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/nat_gateway
+resource "aws_nat_gateway" "this" {
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.this]
+
+  count = length(aws_subnet.public)
+
+  allocation_id = aws_eip.this[count.index].id
+  subnet_id     = aws_subnet.public[count.index].id
+
+  tags = merge({ Name = "${var.env}-${var.nickname}-nat-gateway-${count.index}" }, var.tags)
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/route_table

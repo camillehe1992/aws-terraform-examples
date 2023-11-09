@@ -7,6 +7,13 @@ output "internet_gateway_id" {
   value = aws_internet_gateway.this.id
 }
 
+output "aws_nat_gateway_ids" {
+  value = { for k, v in aws_nat_gateway.this : k => {
+    id        = v.id,
+    public_ip = v.public_ip,
+  } }
+}
+
 output "subnet_ids" {
   value = {
     private = [for subnet in aws_subnet.private : subnet.id],
