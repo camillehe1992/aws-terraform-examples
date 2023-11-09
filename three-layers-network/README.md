@@ -38,7 +38,7 @@ Run below commands to destroy resouces.
 make plan-destroy
 
 # Apply the destroy plan `tfplan`
-make apply-destroy
+make apply
 ```
 
 ## References
