@@ -50,7 +50,22 @@ variable "security_groups" {
   description = "The secuirty group ids for ALB"
 }
 
-variable "subnet_ids" {
+variable "public_subnet_ids" {
   type        = list(string)
   description = "The subnet ids for ALB"
+}
+
+variable "health_check_grace_period_seconds" {
+  type        = number
+  description = "The grace period seconds before checking container health status"
+}
+
+variable "cpu" {
+  type        = number
+  description = "The allocated CPU size"
+}
+
+variable "memory" {
+  type        = number
+  description = "The allocated memory size"
 }
