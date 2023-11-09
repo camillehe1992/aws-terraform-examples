@@ -31,9 +31,18 @@ variable "ecs_cluster_name" {
   description = "Name of the cluster (up to 255 letters, numbers, hyphens, and underscores)"
 }
 
-variable "instance_type" {
+variable "image_id" {
   type        = string
-  description = "The EC2 instance type running in ECS"
+  description = "The AMI Id that is used to launch EC2 instances"
+}
+
+variable "instance_type" {
+  type = string
+  validation {
+    condition     = substr(var.instance_type, 0, 3) == "t4g"
+    error_message = "The instance_type value must be a valid instance type, starting with \"t4g\"."
+  }
+  description = "The EC2 instance type running in ECS, allowed instance familly t4g."
 }
 
 variable "asg_max_size" {
