@@ -69,3 +69,8 @@ variable "subnet_ids" {
   type        = list(string)
   description = "The list of subnets for EC2 instances in ASG"
 }
+
+variable "security_group" {
+  type        = string
+  description = "The security group names to associate with for EC2 instances"
+}

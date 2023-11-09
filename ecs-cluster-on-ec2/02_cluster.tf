@@ -1,3 +1,4 @@
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_cluster
 resource "aws_ecs_cluster" "this" {
   name = upper("${var.env}-${var.ecs_cluster_name}")
 
@@ -9,16 +10,6 @@ resource "aws_ecs_cluster" "this" {
   tags = var.tags
 }
 
-resource "aws_launch_configuration" "this" {
-  name_prefix   = upper("${var.env}-${var.ecs_cluster_name}-")
-  image_id      = var.image_id
-  instance_type = var.instance_type
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/autoscaling_group
 resource "aws_autoscaling_group" "this" {
   name                      = upper("${var.env}-${var.ecs_cluster_name}-asg")
@@ -28,10 +19,12 @@ resource "aws_autoscaling_group" "this" {
   health_check_type         = "ELB"
   desired_capacity          = var.asg_desired_size
   force_delete              = true
-  launch_configuration      = aws_launch_configuration.this.name
-  vpc_zone_identifier       = var.subnet_ids
-  termination_policies      = ["OldestInstance"]
-  protect_from_scale_in     = false
+  launch_template {
+    id = aws_launch_template.this.id
+  }
+  vpc_zone_identifier   = var.subnet_ids
+  termination_policies  = ["OldestInstance"]
+  protect_from_scale_in = false
 
   tag {
     key                 = "AmazonECSManaged"
@@ -40,18 +33,19 @@ resource "aws_autoscaling_group" "this" {
   }
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_capacity_provider
+# Used to associate the auto-scaling group with the cluster’s capacity provider.
 resource "aws_ecs_capacity_provider" "this" {
   name = upper("${var.env}-${var.ecs_cluster_name}-capacity-provider")
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.this.arn
-    managed_termination_protection = "ENABLED"
-
-    managed_scaling {
-      maximum_scaling_step_size = 10
-      minimum_scaling_step_size = 1
-      status                    = "ENABLED"
-      target_capacity           = 10
-    }
+    auto_scaling_group_arn = aws_autoscaling_group.this.arn
   }
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_cluster_capacity_providers
+# Used to bind the ASG capacity provider with the ECS cluster
+resource "aws_ecs_cluster_capacity_providers" "this" {
+  cluster_name       = aws_ecs_cluster.this.name
+  capacity_providers = [aws_ecs_capacity_provider.this.name]
 }
