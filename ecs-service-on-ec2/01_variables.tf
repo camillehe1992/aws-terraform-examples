@@ -30,14 +30,9 @@ variable "vpc_id" {
   type        = string
   description = "The VPC id for load balancer target group, which is the EC2 instances locate"
 }
-variable "ecs_cluster_arn" {
+variable "ecs_cluster_name" {
   type        = string
   description = "The ARN of ECS Cluster"
-}
-
-variable "desired_count" {
-  type        = number
-  description = "Number of instances of the task definition to place and keep running. Defaults to 0"
 }
 
 variable "image" {
@@ -58,6 +53,30 @@ variable "public_subnet_ids" {
 variable "health_check_grace_period_seconds" {
   type        = number
   description = "The grace period seconds before checking container health status"
+}
+
+variable "desired_count" {
+  type        = number
+  default     = 0
+  description = "Number of instances of the task definition to place and keep running"
+}
+
+variable "min_capacity" {
+  type        = number
+  default     = 0
+  description = "Min capacity of the scalable target"
+}
+
+variable "max_capacity" {
+  type        = number
+  default     = 10
+  description = "Max capacity of the scalable target"
+}
+
+variable "cpu_utilization_target_value" {
+  type        = number
+  default     = 75
+  description = "The target percentage of the ECS service CPU utilization"
 }
 
 variable "cpu" {
