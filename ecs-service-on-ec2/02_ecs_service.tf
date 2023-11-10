@@ -10,7 +10,7 @@ resource "aws_ecs_service" "this" {
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
     container_name   = "${var.env}-${var.nickname}"
-    container_port   = 5000
+    container_port   = 80
   }
 
   force_new_deployment = true
@@ -33,26 +33,24 @@ resource "aws_ecs_task_definition" "this" {
       execution_role_arn = module.ecs_task_execution_role.iam_role.arn
       portMappings = [
         {
-          containerPort = 5000
+          containerPort = 80
+          hostPort      = 8080
         }
       ]
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          awslogs-create-group  = "true",
           awslogs-region        = data.aws_region.current.name,
-          awslogs-group         = "ecs-services-logs"
-          awslogs-stream-prefix = "${var.env}-${var.nickname}"
+          awslogs-group         = "${var.env}-app-ecs-cluster"
+          awslogs-stream-prefix = var.nickname
         }
       }
       essential = true
+      healthCheck = {
+        command = ["CMD-SHELL", "curl -f http://localhost/health || exit 1"]
+      }
     }
   ])
-
-  volume {
-    name      = "my-vol"
-    host_path = "/ecs/service-storage"
-  }
 
   tags = var.tags
 }
