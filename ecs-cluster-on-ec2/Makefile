@@ -19,14 +19,17 @@ $(info ENVIRONMENT 		= $(ENVIRONMENT))
 $(info NICKNAME    		= $(NICKNAME))
 $(info VAR_FILE 		= $(VAR_FILE))
 
+$(info DESIRED_SIZE 	= $(DESIRED_SIZE))
+
 # Add defaults/common variables for all components
 define DEFAULTS
 -var-file=$(VAR_FILE) \
 -var aws_profile=$(AWS_PROFILE) \
 -var aws_region=$(AWS_REGION) \
+-var asg_desired_size=$(DESIRED_SIZE) \
 -refresh=true
 endef
- 
+
 override OPTIONS += $(DEFAULTS)
 
 lint:

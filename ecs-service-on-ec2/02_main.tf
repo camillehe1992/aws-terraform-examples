@@ -10,7 +10,7 @@ resource "aws_ecs_service" "this" {
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
     container_name   = "${var.env}-${var.nickname}"
-    container_port   = 80
+    container_port   = var.container_port
   }
 
   force_new_deployment = true
@@ -63,8 +63,8 @@ resource "aws_ecs_task_definition" "this" {
       execution_role_arn = module.ecs_task_execution_role.iam_role.arn
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 8080
+          containerPort = var.container_port
+          hostPort      = 8081
         }
       ]
       logConfiguration = {
@@ -77,10 +77,49 @@ resource "aws_ecs_task_definition" "this" {
       }
       essential = true
       healthCheck = {
-        command = ["CMD-SHELL", "curl -f http://localhost/health || exit 1"]
+        command = ["CMD-SHELL", "curl -f http://localhost${var.health_check} || exit 1"]
       }
     }
   ])
 
   tags = var.tags
+}
+
+resource "aws_lb_target_group" "this" {
+  name        = "${var.env}-${var.nickname}-target-group"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = var.vpc_id
+  target_type = "instance"
+
+  health_check {
+    path = var.health_check
+  }
+
+  tags = var.tags
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/lb
+resource "aws_lb" "this" {
+  name               = "${var.nickname}-${var.env}-alb"
+  internal           = false
+  load_balancer_type = "application"
+  idle_timeout       = 60
+  ip_address_type    = "ipv4"
+  security_groups    = var.security_groups
+  subnets            = var.public_subnet_ids
+
+  tags = var.tags
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/lb_listener
+resource "aws_lb_listener" "this" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this.arn
+  }
 }

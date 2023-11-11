@@ -88,3 +88,13 @@ variable "memory" {
   type        = number
   description = "The allocated memory size"
 }
+
+variable "health_check" {
+  type        = string
+  description = "The path of health check for container"
+}
+
+variable "container_port" {
+  type        = number
+  description = "The port of the container"
+}
