@@ -1,15 +1,20 @@
-name: Terraform Plan & Apply
+name: ECS Cluster on EC2 Apply
 
 on:
   workflow_dispatch:
     branches:
       - main
     inputs:
-      project_nickname:
-        description: Project to run agains
+      asg_desired_size:
+        description: The desired instance count in ECS Cluster
         type: choice
         options:
-          - ecs-cluster-on-ec2
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+        default: dev
         required: true
       environment:
         description: Environment to run agains
@@ -34,14 +39,17 @@ permissions:
   pull-requests: write
 
 env:
+  # Common Env Variables
   AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
   AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
   AWS_ACCOUNT: "${{ vars.AWS_ACCOUNT }}"
   AWS_REGION: "${{ vars.AWS_REGION }}"
   STATE_BUCKET: "${{ vars.STATE_BUCKET }}"
   ENVIRONMENT: "${{ inputs.environment }}"
-  NICKNAME: "${{ inputs.ecs-cluster-on-ec2 }}"
-  WORKING_DIRECTORY: "${{ inputs.ecs-cluster-on-ec2 }}"
+  NICKNAME: ecs-cluster-on-ec2
+  WORKING_DIRECTORY: ecs-cluster-on-ec2
+  # Project Specific Env Variables
+  DESIRED_SIZE: "${{ inputs.asg_desired_size }}"
 
 jobs:
   terraform-plan:

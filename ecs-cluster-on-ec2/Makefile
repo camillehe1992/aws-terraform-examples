@@ -21,7 +21,7 @@ $(info VAR_FILE 		= $(VAR_FILE))
 
 $(info DESIRED_SIZE 	= $(DESIRED_SIZE))
 
-# Add defaults/common variables for all components
+# Add default/common variables for all components
 define DEFAULTS
 -var-file=$(VAR_FILE) \
 -var aws_profile=$(AWS_PROFILE) \
