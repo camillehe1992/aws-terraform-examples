@@ -6,7 +6,7 @@ tags = {
   environment      = "dev"
   nickname         = "network"
   application_name = "three-layers-network"
-  application_desc = "Create a AWS network infrasturcture that follows AWS Well-Archtected and best practice."
+  application_desc = "Create an AWS network infrasturcture that follows AWS Well-Archtected and best practice."
   emails           = "group@example.com"
   repo             = "https://github.com/camillehe1992/aws-terraform-examples"
 }
