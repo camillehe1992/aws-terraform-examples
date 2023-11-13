@@ -5,7 +5,6 @@
 
 SHELL := /bin/bash
 BASE := $(shell /bin/pwd)
-PIP ?= pip
 TF ?= terraform
 
 VAR_FILE := $(BASE)/tf_$(ENVIRONMENT).tfvars

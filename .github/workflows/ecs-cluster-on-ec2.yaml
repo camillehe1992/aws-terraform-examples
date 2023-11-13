@@ -21,6 +21,7 @@ on:
         type: choice
         options:
           - dev
+          - prod
         default: dev
         required: true
       destroy:
