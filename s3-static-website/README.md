@@ -1,4 +1,4 @@
-A demo project to create an AWS S3 bucket for static website hosting using Terraform.
+A demo project to create an AWS S3 bucket for static website hosting using Terraform. There is anther Github repository https://github.com/camillehe1992/static-website-using-docsy-in-aws-s3 that used for source code of frontend docsy UI. These frontend source code will be built and uploaded to the pre created S3 bucket for static website hosting that automatically triggered by Github Actions.
 ___
 
 ## Local Deploy
@@ -19,7 +19,7 @@ make apply
 # 
 # Outputs:
 # 
-# website_endpoint = "camille-s3-website.s3-website-ap-southeast-1.amazonaws.com"
+# website_endpoint = "docsy-portal-prod.s3-website-ap-southeast-1.amazonaws.com"
 ```
 At this point, you will get `404 Not Found` if access the website via `website_endpoint` as above. After static content get uploaded to bucket, you should get the rendered content after refresh the page.
 
@@ -33,7 +33,7 @@ Run below commands to destroy resouces.
 make plan-destroy
 
 # Apply the destroy plan `tfplan`
-make apply-destroy
+make apply
 ```
 
 ## References

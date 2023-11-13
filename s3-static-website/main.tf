@@ -1,6 +1,6 @@
 
 resource "aws_s3_bucket" "this" {
-  bucket = var.static_bucket_name
+  bucket = "${var.static_bucket_name}-${var.env}"
   tags   = var.tags
 }
 
@@ -42,7 +42,8 @@ resource "aws_s3_bucket_website_configuration" "this" {
   }
 }
 resource "aws_s3_bucket_policy" "this" {
-  bucket = aws_s3_bucket.this.id
+  depends_on = [aws_s3_bucket.this]
+  bucket     = aws_s3_bucket.this.id
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression's result to valid JSON syntax.

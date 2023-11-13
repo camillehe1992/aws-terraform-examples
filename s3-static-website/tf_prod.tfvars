@@ -1,7 +1,7 @@
 # General Deployment Variables
-env = "dev"
+env = "prod"
 tags = {
-  environment      = "dev"
+  environment      = "prod"
   nickname         = "s3staticwebsite"
   application_name = "S3 Static Website Hosting"
   application_desc = "Using AWS S3 and Hugo to Create and Host a Static Website"
