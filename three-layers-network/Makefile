@@ -10,11 +10,11 @@ TF ?= terraform
 VAR_FILE := $(BASE)/tf_$(ENVIRONMENT).tfvars
 
 $(info AWS_ACCOUNT 		= $(AWS_ACCOUNT))
+$(info AWS_PROFILE 		= $(AWS_PROFILE))
 $(info AWS_REGION  		= $(AWS_REGION))
 $(info STATE_BUCKET		= $(STATE_BUCKET))
 $(info ENVIRONMENT 		= $(ENVIRONMENT))
 $(info NICKNAME    		= $(NICKNAME))
-$(info AWS_PROFILE 		= $(AWS_PROFILE))
 $(info VAR_FILE 		= $(VAR_FILE))
 
 # Add defaults/common variables for all components
