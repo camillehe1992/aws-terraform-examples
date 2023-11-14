@@ -13,7 +13,7 @@ tags = {
 
 # Project Specific Variables
 ecs_cluster_name          = "app-ecs-cluster"
-image_id                  = "ami-0f80211f2590b9c3d" # ECS optimaized arm64
+image_id                  = "ami-0cb636837b2167e1d" # ECS optimaized arm64
 instance_type             = "t4g.micro"
 asg_max_size              = 2
 asg_min_size              = 0
