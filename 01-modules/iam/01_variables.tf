@@ -36,5 +36,6 @@ variable "customized_policies" {
 
 variable "has_iam_instance_profile" {
   type        = bool
+  default     = false
   description = "If to create instance profile for the role"
 }

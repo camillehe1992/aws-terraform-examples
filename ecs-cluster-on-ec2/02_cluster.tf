@@ -33,6 +33,20 @@ resource "aws_autoscaling_group" "this" {
   }
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/autoscaling_lifecycle_hook
+resource "aws_autoscaling_lifecycle_hook" "instance_terminating" {
+  depends_on = [aws_sns_topic.this]
+
+  name                   = "DrainingInstancesGracefully"
+  autoscaling_group_name = aws_autoscaling_group.this.name
+  default_result         = "ABANDON"
+  heartbeat_timeout      = 900
+  lifecycle_transition   = "autoscaling:EC2_INSTANCE_TERMINATING"
+
+  notification_target_arn = aws_sns_topic.this.arn
+  role_arn                = module.autoscaling_notification_role.iam_role.arn
+}
+
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_capacity_provider
 # Used to associate the auto-scaling group with the cluster’s capacity provider.
 resource "aws_ecs_capacity_provider" "this" {
