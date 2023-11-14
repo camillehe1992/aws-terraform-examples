@@ -61,9 +61,3 @@ data "aws_iam_policy_document" "allow_container_instances_update_policy" {
     resources = ["*"]
   }
 }
-
-data "archive_file" "drain_ecs_tasks" {
-  type        = "zip"
-  source_file = "drain-ecs-tasks.py"
-  output_path = "drain-ecs-tasks.zip"
-}

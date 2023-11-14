@@ -22,6 +22,6 @@ output "trigger_lambda_sns_topic_arn" {
   value = aws_sns_topic.this.arn
 }
 
-output "asg_lambda_arn" {
-  value = aws_lambda_function.drain_ecs_tasks.arn
+output "scale_in_function" {
+  value = module.scale_in_function.function
 }

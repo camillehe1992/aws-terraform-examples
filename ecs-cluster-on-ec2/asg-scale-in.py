@@ -1,9 +1,9 @@
 from os import environ as env
-import json
 import time
+import json
 import boto3
 
-CLUSTER = env.get("CLUSTER")
+ECS_CLUSTER_ARN = env.get("ECS_CLUSTER_ARN")
 REGION = env.get("AWS_REGION")
 
 ECS = boto3.client("ecs", region_name=REGION)
@@ -13,10 +13,10 @@ SNS = boto3.client("sns", region_name=REGION)
 
 def find_ecs_instance_info(instance_id):
     paginator = ECS.get_paginator("list_container_instances")
-    for list_resp in paginator.paginate(cluster=CLUSTER):
+    for list_resp in paginator.paginate(cluster=ECS_CLUSTER_ARN):
         arns = list_resp["containerInstanceArns"]
         desc_resp = ECS.describe_container_instances(
-            cluster=CLUSTER, containerInstances=arns
+            cluster=ECS_CLUSTER_ARN, containerInstances=arns
         )
         for container_instance in desc_resp["containerInstances"]:
             if container_instance["ec2InstanceId"] != instance_id:
@@ -57,7 +57,9 @@ def instance_has_running_tasks(instance_id):
             % (instance_id, instance_arn)
         )
         ECS.update_container_instances_state(
-            cluster=CLUSTER, containerInstances=[instance_arn], status="DRAINING"
+            cluster=ECS_CLUSTER_ARN,
+            containerInstances=[instance_arn],
+            status="DRAINING",
         )
     return running_tasks > 0
 
