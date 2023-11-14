@@ -47,8 +47,8 @@ env:
   AWS_REGION: "${{ vars.AWS_REGION }}"
   STATE_BUCKET: "${{ vars.STATE_BUCKET }}"
   ENVIRONMENT: "${{ inputs.environment }}"
-  NICKNAME: ecs-cluster-on-ec2
-  WORKING_DIRECTORY: ecs-cluster-on-ec2
+  NICKNAME: ecs-service-on-ec2
+  WORKING_DIRECTORY: ecs-service-on-ec2
   # Project Specific Env Variables
   DESIRED_COUNT: "${{ inputs.desired_count }}"
 
