@@ -52,6 +52,7 @@ variable "public_subnet_ids" {
 
 variable "health_check_grace_period_seconds" {
   type        = number
+  default     = 60
   description = "The grace period seconds before checking container health status"
 }
 
@@ -81,16 +82,19 @@ variable "cpu_utilization_target_value" {
 
 variable "cpu" {
   type        = number
+  default     = 128
   description = "The allocated CPU size"
 }
 
 variable "memory" {
   type        = number
+  default     = 128
   description = "The allocated memory size"
 }
 
 variable "health_check" {
   type        = string
+  default     = "/health"
   description = "The path of health check for container"
 }
 

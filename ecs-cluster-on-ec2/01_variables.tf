@@ -47,21 +47,25 @@ variable "instance_type" {
 
 variable "asg_max_size" {
   type        = number
+  default     = 5
   description = "The max count of EC2 instances in ASG"
 }
 
 variable "asg_min_size" {
   type        = number
+  default     = 0
   description = "The min count of EC2 instances in ASG"
 }
 
 variable "asg_desired_size" {
   type        = number
+  default     = 0
   description = "The desired count of EC2 instances in ASG"
 }
 
 variable "health_check_grace_period" {
   type        = number
+  default     = 60
   description = "The grace period in seconds for health check"
 }
 

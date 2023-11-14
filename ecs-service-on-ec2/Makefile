@@ -19,11 +19,14 @@ $(info NICKNAME    		= $(NICKNAME))
 $(info AWS_PROFILE 		= $(AWS_PROFILE))
 $(info VAR_FILE 		= $(VAR_FILE))
 
+$(info DESIRED_COUNT		= $(DESIRED_COUNT))
+
 # Add defaults/common variables for all components
 define DEFAULTS
 -var-file=$(VAR_FILE) \
 -var aws_profile=$(AWS_PROFILE) \
 -var aws_region=$(AWS_REGION) \
+-var desired_count=$(DESIRED_COUNT) \
 -refresh=true
 endef
  

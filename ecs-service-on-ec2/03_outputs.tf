@@ -16,3 +16,14 @@ output "aws_ecs_service" {
     arn     = aws_ecs_service.this.id
   }
 }
+
+output "aws_lb_target_group" {
+  value = aws_lb_target_group.this.arn
+}
+
+output "aws_lb_arn" {
+  value = {
+    domain_name = aws_lb.this.dns_name
+    arn         = aws_lb.this.arn
+  }
+}

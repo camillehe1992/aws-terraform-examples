@@ -12,9 +12,9 @@ tags = {
 }
 
 # Project Specific Variables
-vpc_id                            = "vpc-06c47d9bb120348df"
-public_subnet_ids                 = ["subnet-04839c488f31e2829", "subnet-08122d3fc6e3ce9b1"]
-security_groups                   = ["sg-00fe42c9972b4e4af"]
+vpc_id                            = "vpc-02fd20cf215e9a54b"
+public_subnet_ids                 = ["subnet-05caf66e740964d47", "subnet-0ac7236fe344b9a9c"]
+security_groups                   = ["sg-0579f97438569f812"]
 ecs_cluster_name                  = "PROD-APP-ECS-CLUSTER"
 image                             = "camillehe1992/nginx:latest"
 health_check_grace_period_seconds = 60
