@@ -64,7 +64,6 @@ resource "aws_ecs_task_definition" "this" {
       portMappings = [
         {
           containerPort = var.container_port
-          hostPort      = 8081
         }
       ]
       logConfiguration = {
@@ -87,7 +86,7 @@ resource "aws_ecs_task_definition" "this" {
 
 resource "aws_lb_target_group" "this" {
   name        = "${var.env}-${var.nickname}-target-group"
-  port        = 80
+  port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "instance"
