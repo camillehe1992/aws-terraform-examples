@@ -25,12 +25,3 @@ output "trigger_lambda_sns_topic_arn" {
 output "ecs_container_draining_function_arn" {
   value = module.ecs_container_draining_function.function.arn
 }
-
-output "ecs_scaling_in_function_arn" {
-  value = module.ecs_scaling_in_function.function.arn
-}
-
-output "ecs_scaling_out_function_arn" {
-  value = module.ecs_scaling_out_function.function.arn
-}
-
