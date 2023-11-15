@@ -7,5 +7,5 @@ resource "aws_sns_topic" "this" {
 resource "aws_sns_topic_subscription" "trigger_lambda" {
   topic_arn = aws_sns_topic.this.arn
   protocol  = "lambda"
-  endpoint  = module.scale_in_function.function.arn
+  endpoint  = module.ecs_container_draining_function.function.arn
 }
