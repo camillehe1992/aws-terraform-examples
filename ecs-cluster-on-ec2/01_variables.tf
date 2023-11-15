@@ -47,7 +47,7 @@ variable "instance_type" {
 
 variable "asg_max_size" {
   type        = number
-  default     = 5
+  default     = 3
   description = "The max count of EC2 instances in ASG"
 }
 

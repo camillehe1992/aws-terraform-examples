@@ -1,18 +1,25 @@
-name: ECS Cluster on EC2 Apply
+name: ECS Service Nginx Apply
 
 on:
   workflow_dispatch:
     branches:
       - main
     inputs:
-      asg_desired_size:
-        description: The desired instance count in ECS Cluster
+      desired_count:
+        description: The desired task count
         type: choice
         options:
           - 0
           - 1
           - 2
           - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 10
         default: 1
         required: true
       environment:
@@ -46,10 +53,10 @@ env:
   AWS_REGION: "${{ vars.AWS_REGION }}"
   STATE_BUCKET: "${{ vars.STATE_BUCKET }}"
   ENVIRONMENT: "${{ inputs.environment }}"
-  NICKNAME: ecs-cluster-on-ec2
-  WORKING_DIRECTORY: ecs-cluster-on-ec2
+  NICKNAME: ecs-service-nginx
+  WORKING_DIRECTORY: ecs-service-nginx
   # Project Specific Env Variables
-  DESIRED_SIZE: "${{ inputs.asg_desired_size }}"
+  DESIRED_COUNT: "${{ inputs.desired_count }}"
 
 jobs:
   terraform-plan:
@@ -105,7 +112,7 @@ jobs:
           export exitcode=0
           terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
           -var="aws_region=$AWS_REGION" \
-          -var="asg_desired_size=$DESIRED_SIZE" \
+          -var="desired_count=$DESIRED_COUNT" \
           -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT

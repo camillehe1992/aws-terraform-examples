@@ -1,21 +1,10 @@
-name: ECS Service on EC2 Apply
+name: ECS Service Fluent Bit Daemon Apply
 
 on:
   workflow_dispatch:
     branches:
       - main
     inputs:
-      desired_count:
-        description: The desired task count in ECS Service
-        type: choice
-        options:
-          - 0
-          - 1
-          - 2
-          - 3
-          - 4
-        default: 1
-        required: true
       environment:
         description: Environment to run agains
         type: choice
@@ -40,17 +29,14 @@ permissions:
   pull-requests: write
 
 env:
-  # Common Env Variables
   AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
   AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
   AWS_ACCOUNT: "${{ vars.AWS_ACCOUNT }}"
   AWS_REGION: "${{ vars.AWS_REGION }}"
   STATE_BUCKET: "${{ vars.STATE_BUCKET }}"
   ENVIRONMENT: "${{ inputs.environment }}"
-  NICKNAME: ecs-service-on-ec2
-  WORKING_DIRECTORY: ecs-service-on-ec2
-  # Project Specific Env Variables
-  DESIRED_COUNT: "${{ inputs.desired_count }}"
+  NICKNAME: fluentd
+  WORKING_DIRECTORY: ecs-service-fluent-bit-daemon
 
 jobs:
   terraform-plan:
@@ -106,7 +92,6 @@ jobs:
           export exitcode=0
           terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
           -var="aws_region=$AWS_REGION" \
-          -var="desired_count=$DESIRED_COUNT" \
           -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
