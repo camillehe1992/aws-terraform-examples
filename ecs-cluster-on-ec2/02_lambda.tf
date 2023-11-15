@@ -5,15 +5,15 @@ module "scale_in_function" {
   nickname = var.nickname
   tags     = var.tags
 
-  function_name = "asg-scale-in"
+  function_name = "ecs-container-draining"
   description   = "Gracefully scale in (terminate instances) from ECS ASG"
   role_arn      = module.instance_terminating_lambda_execution_role.iam_role.arn
-  handler       = "asg-scale-in.lambda_handler"
+  handler       = "ecs-container-draining.lambda_handler"
   memory_size   = 128
   timeout       = 60
   runtime       = "python3.9"
-  source_file   = "asg-scale-in.py"
-  output_path   = "asg-scale-in.zip"
+  source_file   = "ecs-container-draining.py"
+  output_path   = "ecs-container-draining.zip"
 
   layers = []
   environment_variables = {

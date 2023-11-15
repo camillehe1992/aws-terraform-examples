@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/sns_topic
 resource "aws_sns_topic" "this" {
-  name = "${var.env}-${var.nickname}-asg-scale-in"
+  name = "${var.env}-${var.nickname}-ecs-container-draining"
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/sns_topic_subscription
