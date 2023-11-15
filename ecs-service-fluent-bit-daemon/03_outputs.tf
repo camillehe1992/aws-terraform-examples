@@ -12,3 +12,11 @@ output "aws_ecs_service" {
     arn     = aws_ecs_service.this.id
   }
 }
+
+output "firehose_delivery_role_arn" {
+  value = module.firehose_delivery_role.iam_role.arn
+}
+
+output "firehose_delivery_stream_arn" {
+  value = aws_kinesis_firehose_delivery_stream.this.arn
+}

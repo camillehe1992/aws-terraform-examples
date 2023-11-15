@@ -55,3 +55,9 @@ variable "memory" {
   default     = 128
   description = "The allocated memory size"
 }
+
+variable "firehose_bucket_name" {
+  type        = string
+  default     = "firehose-streaming-ecs-logs-using-fluent-bit"
+  description = "The S3 bucket name to collect ECS logs using Fluent bit"
+}
