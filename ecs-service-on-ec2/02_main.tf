@@ -64,14 +64,15 @@ resource "aws_ecs_task_definition" "this" {
       portMappings = [
         {
           containerPort = var.container_port
+          protocol      = "tcp"
+          hostPort      = var.container_port
         }
       ]
       logConfiguration = {
-        logDriver = "awslogs",
+        logDriver = "fluentd",
         options = {
-          awslogs-region        = data.aws_region.current.name,
-          awslogs-group         = "${var.env}-app-ecs-cluster"
-          awslogs-stream-prefix = var.nickname
+          fluentd-address = "unix:///var/run/fluent.sock",
+          tag             = "logs-from-${var.nickname}"
         }
       }
       essential = true
