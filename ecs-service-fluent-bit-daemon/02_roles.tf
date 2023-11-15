@@ -2,7 +2,7 @@ module "ecs_task_role" {
   source = "../01-modules/iam"
 
   tags                        = var.tags
-  role_name                   = "ecsTaskRole"
+  role_name                   = "${var.env}-${var.nickname}-ecsTaskRole"
   role_description            = "This IAM Role grants the task access to firehose and CloudWatch Logs"
   assume_role_policy_document = data.aws_iam_policy_document.ecs_tasks_assume_role_policy.json
   aws_managed_policy_arns     = []
@@ -15,7 +15,7 @@ module "firehose_delivery_role" {
   source = "../01-modules/iam"
 
   tags                        = var.tags
-  role_name                   = "firehoseDeliveryRole"
+  role_name                   = "${var.env}-${var.nickname}-firehoseDeliveryRole"
   role_description            = "This IAM Role grants Firehose to write to S3"
   assume_role_policy_document = data.aws_iam_policy_document.firehose_assume_role_policy.json
   aws_managed_policy_arns     = []
