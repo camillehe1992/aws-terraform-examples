@@ -70,7 +70,7 @@ variable "min_capacity" {
 
 variable "max_capacity" {
   type        = number
-  default     = 10
+  default     = 5
   description = "Max capacity of the scalable target"
 }
 
@@ -100,5 +100,6 @@ variable "health_check" {
 
 variable "container_port" {
   type        = number
+  default     = 80
   description = "The port of the container"
 }
