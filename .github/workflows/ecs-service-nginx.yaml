@@ -36,7 +36,7 @@ on:
         default: false
         type: boolean
 
-run-name: ${{ format('Apply to {0} with desired count {1} (destroy={2})', inputs.environment, inputs.desired_count, inputs.destroy) }}
+run-name: ${{ format('Deploy to {0} with desired count {1} (destroy = {2})', inputs.environment, inputs.desired_count, inputs.destroy) }}
 
 permissions:
   contents: read
