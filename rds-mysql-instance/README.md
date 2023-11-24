@@ -46,6 +46,14 @@ make plan
 
 # Apply the plan `tfplan`
 make apply
+
+# Outputs:
+
+# aws_db_instance = {
+#   "arn" = "arn:aws-cn:rds:cn-north-1:123456789012:db:my-demo-rds"
+#   "endpoint" = "my-demo-rds.abcdefg.rds.cn-north-1.amazonaws.com.cn:3306"
+# }
+# secret_arn = "arn:aws-cn:secretsmanager:cn-north-1:123456789012:secret:XXXXXXXXX"
 ```
 
 ## Local Destroy
@@ -57,14 +65,6 @@ make plan-destroy
 
 # Apply the destroy plan `tfplan`
 make apply
-
-# Outputs:
-
-# aws_db_instance = {
-#   "arn" = "arn:aws-cn:rds:cn-north-1:123456789012:db:my-demo-rds"
-#   "endpoint" = "my-demo-rds.abcdefg.rds.cn-north-1.amazonaws.com.cn:3306"
-# }
-# secret_arn = "arn:aws-cn:secretsmanager:cn-north-1:123456789012:secret:XXXXXXXXX"
 ```
 
 > Don't forget to open port 3306 on the security group if you want to access database from Internet.
