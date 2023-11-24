@@ -10,6 +10,7 @@ variable "nickname" {
 
 variable "tags" {
   type        = map(string)
+  default     = {}
   description = "The key value pairs we want to apply as tags to the resources contained in this module"
 }
 
@@ -20,6 +21,7 @@ variable "function_name" {
 
 variable "description" {
   type        = string
+  default     = ""
   description = "The description of Lambda function"
 }
 
@@ -53,7 +55,14 @@ variable "runtime" {
 
 variable "source_file" {
   type        = string
+  default     = null
   description = "The file name of Lambda function source code"
+}
+
+variable "source_dir" {
+  type        = string
+  default     = null
+  description = "The source dir of Lambda function source code. Conflict with source_file"
 }
 
 variable "output_path" {
@@ -63,27 +72,31 @@ variable "output_path" {
 
 variable "layers" {
   type        = list(string)
+  default     = []
   description = "A list of Lambda function associated layers ARN"
 }
 
 variable "environment_variables" {
   type        = map(string)
+  default     = {}
   description = "A set of environment variables of Lambda function"
 }
 
 variable "subnet_ids" {
   type        = list(string)
+  default     = []
   description = "A list of Subnet Ids"
 }
 
 variable "security_group_ids" {
   type        = list(string)
+  default     = []
   description = "A list of Security group Ids"
 }
 
 variable "retention_in_days" {
   type        = number
-  default     = 60
+  default     = 14
   description = "The retention (days) of Lambda function Cloudwatch logs group"
 }
 
@@ -92,5 +105,6 @@ variable "lambda_permissions" {
     principal  = string
     source_arn = string
   }))
-  description = "A set of lambda permissions"
+  default     = {}
+  description = "A map of lambda permissions"
 }

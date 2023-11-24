@@ -1,5 +1,5 @@
 module "secrets" {
-  source = "./modules/secretsmanager"
+  source = "../01-modules/secret"
 
   env      = var.env
   nickname = var.nickname
