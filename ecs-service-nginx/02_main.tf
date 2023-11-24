@@ -53,7 +53,8 @@ resource "aws_appautoscaling_policy" "this" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_task_definition
 resource "aws_ecs_task_definition" "this" {
-  family = "${var.env}-${var.nickname}"
+  family        = "${var.env}-${var.nickname}"
+  task_role_arn = module.ecs_task_role.iam_role.arn
   container_definitions = jsonencode([
     {
       name               = "${var.env}-${var.nickname}"
