@@ -1,14 +1,50 @@
-The project is used to deploy a daemonset task for Fluent bit to in AWS ECS Cluster to enable centralized container logging with Fluent Bit. 
+# ECS Service (Daemon) for Fluent-Bit
 
-The Terraform resources deployed in the project includes:
+The project is used to deploy a daemonset service for Fluent-Bit in AWS ECS Cluster to enable centralized container logging with Fluent Bit.
+
+The Terraform resources deployed in the project include:
+
 - An ECS service with scheduling strategy as DAEMON
 - An ECS task definition for above service using docker image `camillehe1992/fluent-bit:latest`
 - An IAM task role attached on task
+- An firehose Delivery Stream destinate to S3
 
-___
+## Project Structure
+
+```bash
+.
+├── .env.sample                 # file for environment variables
+├── .terraform.lock.hcl
+├── 01_data.tf                  # All file with .tf extensions are Terraform related
+├── 01_local.tf
+├── 01_variables.tf
+├── 01_versions.tf
+├── 02_firehose.tf
+├── 02_main.tf
+├── 02_roles.tf
+├── 03_outputs.tf
+├── Dockerfile                  # Dockerfile for custom fluent-bit image
+├── Makefile                    # Define several common useful Make scripts
+├── README.md
+├── fluent-bit.conf             # fluent-bit configuration file
+├── parsers.conf                # fluent-bit parsers file
+├── tf_dev.tfvars               # Terraform variables per environments
+├── tf_prod.tfvars
+```
+
+## Build & Publish Docker Image
+
+Use below command to publish Docker image to a docker registry, for example DockerHub.
+
+```bash
+make create-image
+```
+
+> The `make create-image` script creates a docker image that is compatiable with both amd64/arm64 Arch OS.
 
 ## Local Deploy
-Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 
+
+Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables.
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
 
@@ -23,6 +59,7 @@ make apply
 ```
 
 ## Local Destroy
+
 Run below commands to destroy resouces.
 
 ```bash
@@ -34,4 +71,7 @@ make apply
 ```
 
 ## References
-- https://towardsthecloud.com/amazon-ecs-task-role-vs-execution-role
+
+- [](https://fluentbit.io/)
+- [Centralized Container Logging with Fluent Bit](https://aws.amazon.com/blogs/opensource/centralized-container-logging-fluent-bit/)
+- [Task role vs task execution role in Amazon ECS](https://towardsthecloud.com/amazon-ecs-task-role-vs-execution-role)

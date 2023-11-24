@@ -1,6 +1,7 @@
-Terraform Module Details
+# Terraform Module Details
 
 ## Variables
+
 | Variable Name                  | Type         | Description                                                      | Default                  |
 | ------------------------------ | ------------ | ---------------------------------------------------------------- | ------------------------ |
 | tags                           | map(string)  | The key value pairs apply as tags to all resources in the module | {}                       |
@@ -24,7 +25,9 @@ module "lambda_execution_role" {
   aws_managed_policy_arns = "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 ```
+
 ### IAM Role with Customized Configuration
+
 ```bash
 data "aws_iam_policy_document" "ecs_tasks_execution_role_inline_policy" {
   statement {
@@ -65,6 +68,7 @@ module "lambda_execution_role" {
 ```
 
 ## Outputs
+
 ```bash
 output "iam_role" {
   value = {
@@ -74,4 +78,3 @@ output "iam_role" {
   }
 }
 ```
-

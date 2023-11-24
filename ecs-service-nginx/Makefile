@@ -61,7 +61,6 @@ apply: init
 	$(info [*] Apply Terrafrom Infra)
 	@$(TF) apply tfplan
 
-
 create-image:
 	# docker buildx create --name multi-arch --platform "linux/arm64,linux/amd64"
 	docker buildx build --platform linux/arm64,linux/amd64 --builder multi-arch \
