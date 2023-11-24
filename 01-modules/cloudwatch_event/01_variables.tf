@@ -20,6 +20,7 @@ variable "rule_name" {
 
 variable "description" {
   type        = string
+  default     = ""
   description = "The description of EventBridge rule"
 }
 
@@ -36,6 +37,7 @@ variable "is_enabled" {
 
 variable "target_id" {
   type        = string
+  default     = ""
   description = "The target id of the EventBridge rule"
 }
 

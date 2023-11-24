@@ -18,4 +18,5 @@ variable "secret_specs" {
     description   = string
     secret_string = string
   }))
+  description = "A map of secrets specs with description and secret string"
 }
