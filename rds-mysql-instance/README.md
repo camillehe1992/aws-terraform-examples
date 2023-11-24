@@ -1,5 +1,36 @@
-A terraform project that is used to create a MYSQL RDS instance in AWS.
-___
+A terraform project that is used to create a MYSQL RDS instance in AWS, with the Lambda function which is intended for database initialization.
+
+The AWS resources created in the project includes:
+1. A RDS instance with custom parameter group. The database secret is managed in Secrets Manager.
+2. A Lambda function and function execution role with appropriate permissions.
+
+The architecture diagram shows as below.
+
+![arch-diagram](rds-mysql-with-lambda.png)
+
+## Project Structure
+
+```bash
+.
+├── 01_data.tf                      # All file with .tf extension are Terraform related
+├── 01_variables.tf
+├── 01_versions.tf
+├── 02_lambda_function.tf
+├── 02_main.tf
+├── 03_outputs.tf
+├── Makefile                        # Make scripts
+├── README.md
+├── rds-mysql-with-lambda.png
+├── src                             # Lambda function source code
+│   ├── index.js
+│   ├── node_modules
+│   ├── package-lock.json
+│   ├── package.json
+│   └── script.sql
+├── tf_dev.tfvars                   # Terraform variables per env
+├── tf_prod.tfvars
+
+```
 
 ## Local Deploy
 Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 
