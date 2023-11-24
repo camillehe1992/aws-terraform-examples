@@ -85,8 +85,8 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${var.env}-${var.nickname}-target-group"
-  port        = var.container_port
+  name        = "${var.env}-${var.nickname}"
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "instance"
@@ -100,7 +100,7 @@ resource "aws_lb_target_group" "this" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/lb
 resource "aws_lb" "this" {
-  name               = "${var.nickname}-${var.env}-alb"
+  name               = "${var.nickname}-${var.env}"
   internal           = false
   load_balancer_type = "application"
   idle_timeout       = 60
