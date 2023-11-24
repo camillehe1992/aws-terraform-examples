@@ -114,7 +114,7 @@ resource "aws_lb" "this" {
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/lb_listener
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
-  port              = "80"
+  port              = 80
   protocol          = "HTTP"
 
   default_action {
