@@ -2,7 +2,8 @@ A terraform project that is used to create a MYSQL RDS instance in AWS, with the
 
 The AWS resources created in the project includes:
 1. A RDS instance with custom parameter group. The database secret is managed in Secrets Manager.
-2. A Lambda function and function execution role with appropriate permissions.
+2. A Lambda function and CloudWatch Logs group for function logs persistance. 
+3. A Lambda function execution IAM role with appropriate permissions.
 
 The architecture diagram shows as below.
 
@@ -15,7 +16,7 @@ The architecture diagram shows as below.
 ├── 01_data.tf                      # All file with .tf extension are Terraform related
 ├── 01_variables.tf
 ├── 01_versions.tf
-├── 02_lambda_function.tf
+├── 02_lambda_function.tf           # Use modules for AWS resoures
 ├── 02_main.tf
 ├── 03_outputs.tf
 ├── Makefile                        # Make scripts
