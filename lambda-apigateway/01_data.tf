@@ -1,3 +1,5 @@
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition
+# https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file
 data "aws_caller_identity" "current" {}
 
 data "aws_partition" "current" {}

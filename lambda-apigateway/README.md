@@ -1,9 +1,31 @@
-The sample terraform project demonstrates a serverless application based on AWS Lambda function and API Gateway. 
+# API Gateway + Lambda Function (Serverless) Application
 
----
+The terraform project demonstrates a serverless application based on AWS Lambda function and API Gateway.
+
+## Project Structure
+
+```bash
+.
+├── .env.sample                 # file for environment variables
+├── .terraform.lock.hcl
+├── 01_data.tf                  # All file with .tf extensions are Terraform related
+├── 01_variables.tf
+├── 01_versions.tf
+├── 02_api_gateway.tf
+├── 02_lambda_function.tf
+├── 03_outputs.tf
+├── Makefile                    # Define several common useful Make scripts
+├── README.md
+├── src                         # Lambda function source code
+│   └── main.py
+├── swagger.yaml                # API Gateway resource/method definitions
+├── tf_dev.tfvars               # Terraform variables per environments
+├── tf_prod.tfvars
+```
 
 ## Local Deploy
-Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 
+
+Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables.
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
 
@@ -18,6 +40,7 @@ make apply
 ```
 
 ## Local Destroy
+
 Run below commands to destroy resouces.
 
 ```bash
@@ -29,8 +52,3 @@ make apply
 ```
 
 ## References
-
-- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function
-- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api
-- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition
-- https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file

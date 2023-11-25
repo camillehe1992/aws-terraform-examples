@@ -1,9 +1,12 @@
+# Build MYSQL RDS Instance with Initialization Function
+
 A terraform project that is used to create a MYSQL RDS instance in AWS, with the Lambda function which is intended for database initialization.
 
-The AWS resources created in the project includes:
-1. A RDS instance with custom parameter group. The database secret is managed in Secrets Manager.
-2. A Lambda function and CloudWatch Logs group for function logs persistance. 
-3. A Lambda function execution IAM role with appropriate permissions.
+The AWS resources created in the project include:
+
+1. A RDS instance with custom parameter group. The database secret is managed in Secrets Manager
+2. A Lambda function and CloudWatch Logs group for function logs persistance
+3. A Lambda function execution IAM role with appropriate permissions
 
 The architecture diagram shows as below.
 
@@ -13,6 +16,8 @@ The architecture diagram shows as below.
 
 ```bash
 .
+├── .env.sample                 # file for environment variables
+├── .terraform.lock.hcl
 ├── 01_data.tf                      # All file with .tf extension are Terraform related
 ├── 01_variables.tf
 ├── 01_versions.tf
@@ -30,10 +35,10 @@ The architecture diagram shows as below.
 │   └── script.sql
 ├── tf_dev.tfvars                   # Terraform variables per env
 ├── tf_prod.tfvars
-
 ```
 
 ## Local Deploy
+
 Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
@@ -57,6 +62,7 @@ make apply
 ```
 
 ## Local Destroy
+
 Run below commands to destroy resouces.
 
 ```bash
@@ -69,8 +75,8 @@ make apply
 
 > Don't forget to open port 3306 on the security group if you want to access database from Internet.
 
-
 ## Retrieve RDS database secret from AWS Secrets Manager
+
 Export secret arn in environment variable using below command.
 
 ```bash
@@ -82,10 +88,13 @@ Use AWS CLI to fetch auto generated secret for RDS database that managed in AWS 
 ```bash
 make get-secret
 ```
+
 Then, you can access RDS database using secret above via `endpoint` in terraform output.
 
 ## Initialize RDS database using pre-defined script via Lambda Function
+
 In order to connect to RDS database and initialze it, we created a Lambda function to execute SQL statements. The related source code locates in `src` folder.
+
 ```bash
 src
 ├── index.js
@@ -95,6 +104,7 @@ src
 ```
 
 The script in `script.sql` file is what the function executes.
+
 ```sql
 CREATE DATABASE IF NOT EXISTS pokemon;
 
@@ -119,6 +129,7 @@ Use AWS CLI to invoke Lambda function to initialize RDS database we just created
 export FUNC_ARN=$(terraform output -raw function_arn)
 make initialize-rds
 ```
+
 Here is the Lambda function query response from Cloudwatch logs for a successful initialization.
 
 ```json
@@ -151,8 +162,10 @@ query result: [{
     "changedRows": 0
 }]
 ```
+
 > If you use the default VPC, subnets and secruity group in your AWS account, you probaly meet a timeout issue when invoking Lambda function like me. That's because our Lambda function locates in a VPC in order to connect to RDS database, and it's going to retrive secrets from Secrets Manager which is a service out of VPC. To address the issue, you can create Secrets Manager endpoint within your VPC.
 
 ## References
-- https://repost.aws/questions/QU1WLg4Q2-TCqznkgmpPnW0g/getting-secret-from-lambda-times-out-when-attached-to-vpc-subnet
-- https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-secrets-manager/classes/getsecretvaluecommand.html
+
+- [Getting secret from Lambda times out when attached to VPC subnet](https://repost.aws/questions/QU1WLg4Q2-TCqznkgmpPnW0g/getting-secret-from-lambda-times-out-when-attached-to-vpc-subnet)
+- [Class GetSecretValueCommand](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-secrets-manager/classes/getsecretvaluecommand.html)

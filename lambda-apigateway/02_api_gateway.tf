@@ -1,4 +1,4 @@
-# API Gateway
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api
 resource "aws_api_gateway_rest_api" "this" {
   name = "${var.env}-${var.nickname}-${var.rest_api_name}"
   body = templatefile(var.openapi_json_file, {
