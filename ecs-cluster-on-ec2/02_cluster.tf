@@ -10,6 +10,14 @@ resource "aws_ecs_cluster" "this" {
   tags = var.tags
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/cloudwatch_log_group
+resource "aws_cloudwatch_log_group" "this" {
+  name              = aws_ecs_cluster.this.name
+  retention_in_days = var.retention_in_days
+
+  tags = var.tags
+}
+
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/autoscaling_group
 resource "aws_autoscaling_group" "this" {
   name                      = upper("${var.environment}-${var.ecs_cluster_name}-asg")

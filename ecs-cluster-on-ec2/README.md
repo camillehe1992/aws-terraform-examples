@@ -27,7 +27,6 @@ The archtecture diagram shows as below.
 ├── 01_locals.tf
 ├── 01_variables.tf
 ├── 01_versions.tf
-├── 02_cloudwatch.tf
 ├── 02_cluster.tf
 ├── 02_lambda.tf
 ├── 02_launch_template.tf
