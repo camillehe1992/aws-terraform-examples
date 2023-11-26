@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "prod"
-nickname = "ecs-cluster-on-ec2"
+environment = "prod"
+nickname    = "ecs-cluster-on-ec2"
 
 tags = {
   environment      = "prod"
@@ -12,12 +12,6 @@ tags = {
 }
 
 # Project Specific Variables
-ecs_cluster_name          = "app-ecs-cluster"
-image_id                  = "ami-0cb636837b2167e1d" # ECS optimaized arm64
-instance_type             = "t4g.micro"
-asg_max_size              = 3
-asg_min_size              = 0
-asg_desired_size          = 0
-health_check_grace_period = 300
-subnet_ids                = ["subnet-05caf66e740964d47", "subnet-0ac7236fe344b9a9c"]
-security_group            = "sg-0579f97438569f812"
+image_id       = "ami-0cb636837b2167e1d" # ECS optimaized arm64
+subnet_ids     = ["subnet-05caf66e740964d47", "subnet-0ac7236fe344b9a9c"]
+security_group = "sg-0579f97438569f812"
