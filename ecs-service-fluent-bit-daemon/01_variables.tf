@@ -37,6 +37,7 @@ variable "ecs_cluster_name" {
 
 variable "image" {
   type        = string
+  default     = "camillehe1992/fluent-bit:latest"
   description = "The image used to start a container"
 }
 
@@ -52,7 +53,7 @@ variable "public_subnet_ids" {
 
 variable "memory" {
   type        = number
-  default     = 128
+  default     = 50
   description = "The allocated memory size"
 }
 

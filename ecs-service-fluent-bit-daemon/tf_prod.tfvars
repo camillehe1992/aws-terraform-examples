@@ -16,6 +16,4 @@ vpc_id            = "vpc-02fd20cf215e9a54b"
 public_subnet_ids = ["subnet-05caf66e740964d47", "subnet-0ac7236fe344b9a9c"]
 security_groups   = ["sg-0579f97438569f812"]
 ecs_cluster_name  = "PROD-APP-ECS-CLUSTER"
-image             = "camillehe1992/fluent-bit:latest"
-memory            = 50
 
