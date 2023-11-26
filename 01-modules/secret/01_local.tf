@@ -1,3 +1,3 @@
 locals {
-  prefix = "/${var.nickname}/${var.env}/${data.aws_region.current.name}"
+  prefix = "/${var.nickname}/${var.environment}/${data.aws_region.current.name}"
 }

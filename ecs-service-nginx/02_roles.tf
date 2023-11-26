@@ -2,7 +2,7 @@ module "ecs_task_execution_role" {
   source = "../01-modules/iam"
 
   tags                           = var.tags
-  role_name                      = "${var.env}-${var.nickname}-ecsTaskExecutionRole"
+  role_name                      = "${var.environment}-${var.nickname}-ecsTaskExecutionRole"
   role_description               = "The role grants the Amazon ECS container and Fargate agents permission to make AWS API calls on your behalf"
   assume_role_policy_identifiers = ["ecs-tasks.amazonaws.com"]
   aws_managed_policy_arns        = []
@@ -16,7 +16,7 @@ module "ecs_task_role" {
   source = "../01-modules/iam"
 
   tags                           = var.tags
-  role_name                      = "${var.env}-${var.nickname}-ecsTaskRole"
+  role_name                      = "${var.environment}-${var.nickname}-ecsTaskRole"
   role_description               = "The role is used for container that running in ECS container instances to access other AWS services"
   assume_role_policy_identifiers = ["ecs-tasks.amazonaws.com"]
   aws_managed_policy_arns        = []

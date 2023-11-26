@@ -4,7 +4,7 @@
 
 | Variable Name       | Type        | Description                                                                  | Default      |
 | ------------------- | ----------- | ---------------------------------------------------------------------------- | ------------ |
-| env                 | string      | The environment of application                                               | -            |
+| environment         | string      | The environment of application                                               | -            |
 | nickname            | string      | The nickname of application. Must be lowercase without special chars         | -            |
 | tags                | map(string) | The key value pairs we want to apply as tags to the resources in this module | {}           |
 | rule_name           | string      | The EventBridge rule name                                                    | -            |
@@ -22,8 +22,8 @@
 module "event_rule" {
   source = "../01-modules/cloudwatch_event"
 
-  env      = "dev"
-  nickname = "nickname"
+  environment = "dev"
+  nickname    = "nickname"
   tags = {
     environment = "dev"
     nickname    = "nickname"

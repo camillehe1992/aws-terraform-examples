@@ -4,7 +4,7 @@
 
 | Variable Name | Type        | Description                                                                  | Default |
 | ------------- | ----------- | ---------------------------------------------------------------------------- | ------- |
-| env           | string      | The environment of application                                               | -       |
+| environment   | string      | The environment of application                                               | -       |
 | nickname      | string      | The nickname of application. Must be lowercase without special chars         | -       |
 | tags          | map(string) | The key value pairs we want to apply as tags to the resources in this module | {}      |
 | secret_specs  | map(object) | A map of secrets specs with description and secret string                    | -       |
@@ -24,7 +24,7 @@
 module "secrets" {
   source = "../01-modules/secret"
 
-  env      = "dev"
+ environment     = "dev"
   nickname = "nickname"
   tags = {
     environment = "dev"

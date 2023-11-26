@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_service
 resource "aws_ecs_service" "this" {
-  name                 = "${var.env}-${var.nickname}"
+  name                 = "${var.environment}-${var.nickname}"
   cluster              = local.ecs_cluster_arn
   task_definition      = aws_ecs_task_definition.this.arn
   force_new_deployment = true
@@ -11,11 +11,11 @@ resource "aws_ecs_service" "this" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_task_definition
 resource "aws_ecs_task_definition" "this" {
-  family        = "${var.env}-${var.nickname}"
+  family        = "${var.environment}-${var.nickname}"
   task_role_arn = module.ecs_task_role.iam_role.arn
   container_definitions = jsonencode([
     {
-      name              = "${var.env}-${var.nickname}-daemon"
+      name              = "${var.environment}-${var.nickname}-daemon"
       image             = var.image
       memoryReservation = var.memory
 
@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "this" {
         logDriver = "awslogs",
         options = {
           awslogs-region        = data.aws_region.current.name,
-          awslogs-group         = "${var.env}-app-ecs-cluster"
+          awslogs-group         = "${var.environment}-app-ecs-cluster"
           awslogs-stream-prefix = var.nickname
         }
       }

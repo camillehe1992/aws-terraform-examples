@@ -5,7 +5,7 @@ resource "aws_db_subnet_group" "default" {
 
   tags = merge(var.tags,
     {
-      Name = "${var.env}-${var.nickname}"
+      Name = "${var.environment}-${var.nickname}"
   })
 }
 

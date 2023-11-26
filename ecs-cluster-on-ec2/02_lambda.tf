@@ -1,9 +1,9 @@
 module "ecs_container_draining_function" {
   source = "../01-modules/lambda"
 
-  env      = var.env
-  nickname = var.nickname
-  tags     = var.tags
+  environment = var.environment
+  nickname    = var.nickname
+  tags        = var.tags
 
   function_name = "ecs-container-draining"
   description   = "Gracefully drain ECS tasks from EC2 instances before the instances are terminated by autoscaling."

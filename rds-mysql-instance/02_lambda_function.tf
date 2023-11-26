@@ -3,7 +3,7 @@ module "lambda_execution_role" {
 
   tags = var.tags
 
-  name_prefix      = "${var.env}-${var.nickname}-"
+  name_prefix      = "${var.environment}-${var.nickname}-"
   role_name        = "LambdaExecutionRole"
   role_description = "The lambda execution role to access RDS"
   aws_managed_policy_arns = [
@@ -32,9 +32,9 @@ module "interact_database_func" {
   depends_on = [null_resource.lambda_dependencies]
   source     = "../01-modules/lambda"
 
-  env      = var.env
-  nickname = var.nickname
-  tags     = var.tags
+  environment = var.environment
+  nickname    = var.nickname
+  tags        = var.tags
 
   function_name = "rds-initializer"
   description   = "The function is used to initialize RDS database"

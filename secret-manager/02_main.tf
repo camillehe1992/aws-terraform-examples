@@ -2,9 +2,9 @@
 module "secrets" {
   source = "../01-modules/secret"
 
-  env      = var.env
-  nickname = var.nickname
-  tags     = var.tags
+  environment = var.environment
+  nickname    = var.nickname
+  tags        = var.tags
 
   secret_specs = {
     database_password = {

@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/launch_template
 resource "aws_launch_template" "this" {
-  name_prefix   = "${var.env}-${var.ecs_cluster_name}-"
+  name_prefix   = "${var.environment}-${var.ecs_cluster_name}-"
   image_id      = var.image_id
   instance_type = var.instance_type
 
@@ -35,7 +35,7 @@ resource "aws_launch_template" "this" {
 
   update_default_version = true
 
-  user_data = base64encode(templatefile("${path.module}/ecs.sh", { ECS_CLUSTER = upper("${var.env}-${var.ecs_cluster_name}") }))
+  user_data = base64encode(templatefile("${path.module}/ecs.sh", { ECS_CLUSTER = upper("${var.environment}-${var.ecs_cluster_name}") }))
 
   tags = var.tags
 }

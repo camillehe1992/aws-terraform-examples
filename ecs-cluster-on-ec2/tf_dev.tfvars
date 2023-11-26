@@ -12,7 +12,6 @@ tags = {
 }
 
 # Project Specific Variables
-# Navinfo Account
 ecs_cluster_name          = "app-ecs-cluster"
 image_id                  = "ami-01cf7955aaf2c5a18" # ECS optimaized arm64
 instance_type             = "t4g.micro"

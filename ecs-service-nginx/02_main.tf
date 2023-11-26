@@ -1,6 +1,6 @@
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_service
 resource "aws_ecs_service" "this" {
-  name                              = "${var.env}-${var.nickname}"
+  name                              = "${var.environment}-${var.nickname}"
   cluster                           = local.ecs_cluster_arn
   task_definition                   = aws_ecs_task_definition.this.arn
   desired_count                     = var.desired_count
@@ -9,7 +9,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = "${var.env}-${var.nickname}"
+    container_name   = "${var.environment}-${var.nickname}"
     container_port   = var.container_port
   }
 
@@ -53,11 +53,11 @@ resource "aws_appautoscaling_policy" "this" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/ecs_task_definition
 resource "aws_ecs_task_definition" "this" {
-  family        = "${var.env}-${var.nickname}"
+  family        = "${var.environment}-${var.nickname}"
   task_role_arn = module.ecs_task_role.iam_role.arn
   container_definitions = jsonencode([
     {
-      name               = "${var.env}-${var.nickname}"
+      name               = "${var.environment}-${var.nickname}"
       image              = var.image
       cpu                = var.cpu
       memory             = var.memory
@@ -85,7 +85,7 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "${var.env}-${var.nickname}"
+  name        = "${var.environment}-${var.nickname}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -100,7 +100,7 @@ resource "aws_lb_target_group" "this" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/lb
 resource "aws_lb" "this" {
-  name               = "${var.nickname}-${var.env}"
+  name               = "${var.nickname}-${var.environment}"
   internal           = false
   load_balancer_type = "application"
   idle_timeout       = 60

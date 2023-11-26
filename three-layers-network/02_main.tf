@@ -1,13 +1,13 @@
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/vpc
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr_block
-  tags       = merge({ Name = "${var.env}-${var.nickname}" }, var.tags)
+  tags       = merge({ Name = "${var.environment}-${var.nickname}" }, var.tags)
 }
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
-  tags = merge({ Name = "${var.env}-${var.nickname}" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}" }, var.tags)
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/subnet
@@ -18,7 +18,7 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-private-${each.key}" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-private-${each.key}" }, var.tags)
 }
 
 resource "aws_subnet" "public" {
@@ -28,7 +28,7 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.this.id
   cidr_block        = each.value
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-public-${each.key}" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-public-${each.key}" }, var.tags)
 }
 
 resource "aws_eip" "this" {
@@ -36,7 +36,7 @@ resource "aws_eip" "this" {
 
   domain = "vpc"
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-eip-${each.key}-${each.value}" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-eip-${each.key}-${each.value}" }, var.tags)
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/nat_gateway
@@ -50,7 +50,7 @@ resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.this[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-nat-gateway-${count.index}" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-nat-gateway-${count.index}" }, var.tags)
 }
 
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/route_table
@@ -62,7 +62,7 @@ resource "aws_route_table" "this" {
     gateway_id = aws_internet_gateway.this.id
   }
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-rtb" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-rtb" }, var.tags)
 }
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/route_table_association
 resource "aws_route_table_association" "igw-rule" {
@@ -77,7 +77,7 @@ resource "aws_route_table_association" "igw-rule" {
 resource "aws_security_group" "elb" {
   depends_on = [aws_vpc.this]
 
-  name        = "${var.env}-${var.nickname}-elb"
+  name        = "${var.environment}-${var.nickname}-elb"
   description = "Security group for load balancer layer"
   vpc_id      = aws_vpc.this.id
 
@@ -105,13 +105,13 @@ resource "aws_security_group" "elb" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-elb" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-elb" }, var.tags)
 }
 
 resource "aws_security_group" "app" {
   depends_on = [aws_vpc.this, aws_security_group.elb]
 
-  name        = "${var.env}-${var.nickname}-app"
+  name        = "${var.environment}-${var.nickname}-app"
   description = "Security group for application layer"
   vpc_id      = aws_vpc.this.id
 
@@ -123,7 +123,7 @@ resource "aws_security_group" "app" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-app" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-app" }, var.tags)
 }
 
 resource "aws_security_group_rule" "app-ingress" {
@@ -141,7 +141,7 @@ resource "aws_security_group_rule" "app-ingress" {
 resource "aws_security_group" "data" {
   depends_on = [aws_vpc.this, aws_security_group.app]
 
-  name        = "${var.env}-${var.nickname}-data"
+  name        = "${var.environment}-${var.nickname}-data"
   description = "Security group for database layer"
   vpc_id      = aws_vpc.this.id
 
@@ -153,7 +153,7 @@ resource "aws_security_group" "data" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  tags = merge({ Name = "${var.env}-${var.nickname}-data" }, var.tags)
+  tags = merge({ Name = "${var.environment}-${var.nickname}-data" }, var.tags)
 }
 
 resource "aws_security_group_rule" "data-ingress" {

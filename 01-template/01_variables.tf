@@ -10,7 +10,7 @@ variable "aws_profile" {
   description = "AWS profile which used for terraform infra deployment"
 }
 
-variable "env" {
+variable "environment" {
   type        = string
   description = "The environment of application"
 }

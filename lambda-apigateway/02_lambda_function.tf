@@ -1,6 +1,6 @@
 // Lambda Function
 resource "aws_lambda_function" "this" {
-  function_name    = "${var.env}-${var.nickname}-${var.function_name}"
+  function_name    = "${var.environment}-${var.nickname}-${var.function_name}"
   filename         = "${path.module}/${var.function_name}.zip"
   runtime          = var.runtime
   handler          = "main.lambda_handler"
@@ -16,7 +16,7 @@ resource "aws_cloudwatch_log_group" "function_logs" {
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name = "${var.env}-${var.nickname}-${var.function_name}-exec-role"
+  name = "${var.environment}-${var.nickname}-${var.function_name}-exec-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
