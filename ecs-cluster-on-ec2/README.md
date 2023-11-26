@@ -48,6 +48,8 @@ Create a `.env` from `env.sample`, and update environment variables as needed. T
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
 
+Update `DESIRED_SIZE` in .env file if you want to change the desired EC2 instances count in ECS Cluster. We only launch one instance for demo purpose.
+
 Setup local development and AWS credentials following [README](../README.md) before you can deploy AWS resources using below commands.
 
 ```bash
@@ -69,6 +71,10 @@ make plan-destroy
 # Apply the destroy plan `tfplan`
 make apply
 ```
+
+## GitHub Actions
+
+You can also deploy the project to AWS account via GitHub Actions workflows. I created a workflow which has the same name of project directory. Follow [Setup GitHub Environment for GitHub Actions Workflows](../README.md#setup-github-environment-for-github-actions-workflows) to setup and run GitHub Actions workflow from console.
 
 ## References
 

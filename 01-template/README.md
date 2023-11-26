@@ -46,4 +46,8 @@ make plan-destroy
 make apply
 ```
 
+## GitHub Actions
+
+You can also deploy the project to AWS account via GitHub Actions workflows. I created a workflow which has the same name of project directory. Follow [Setup GitHub Environment for GitHub Actions Workflows](../README.md#setup-github-environment-for-github-actions-workflows) to setup and run GitHub Actions workflow from console.
+
 ## References
