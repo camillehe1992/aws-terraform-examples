@@ -145,6 +145,13 @@ jobs:
           name: tfplan
           path: ${{ env.WORKING_DIRECTORY }}/tfplan
 
+      # Save  ecs-container-draining.zip to artifacts
+      - name: Publish ecs-container-draining.zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: ecs-container-draining.zip
+          path: ${{ env.WORKING_DIRECTORY }}/ecs-container-draining.zip
+
       # Create string output of Terraform Plan
       - name: Create String Output
         id: tf-plan-string
@@ -203,6 +210,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: tfplan
+          path: ${{ env.WORKING_DIRECTORY }}
+
+      # Download saved ecs-container-draining.zip from artifacts
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v3
+        with:
+          name: ecs-container-draining.zip
           path: ${{ env.WORKING_DIRECTORY }}
 
       # Terraform Apply
