@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "this" {
         logDriver = "awslogs",
         options = {
           awslogs-region        = data.aws_region.current.name,
-          awslogs-group         = "${var.environment}-app-ecs-cluster"
+          awslogs-group         = var.ecs_cluster_name
           awslogs-stream-prefix = var.nickname
         }
       }
