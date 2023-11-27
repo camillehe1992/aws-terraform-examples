@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "prod"
-nickname = "network"
+environment = "prod"
+nickname    = "network"
 
 tags = {
   environment      = "prod"

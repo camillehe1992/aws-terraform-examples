@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "dev"
-nickname = "lambdaapigateway"
+environment = "dev"
+nickname    = "lambdaapigateway"
 
 tags = {
   environment      = "dev"

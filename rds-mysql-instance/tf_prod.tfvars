@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "prod"
-nickname = "mysql"
+environment = "prod"
+nickname    = "mysql"
 
 tags = {
   environment      = "prod"

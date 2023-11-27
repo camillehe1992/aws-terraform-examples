@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "dev"
-nickname = "secretmanager"
+environment = "dev"
+nickname    = "secretmanager"
 
 tags = {
   environment      = "dev"

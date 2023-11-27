@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "dev"
-nickname = "ec2instance"
+environment = "dev"
+nickname    = "ec2instance"
 
 tags = {
   environment      = "dev"

@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "prod"
-nickname = "fluentd"
+environment = "prod"
+nickname    = "fluentd"
 
 tags = {
   environment      = "prod"

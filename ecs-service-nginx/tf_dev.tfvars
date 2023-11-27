@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "dev"
-nickname = "nginx"
+environment = "dev"
+nickname    = "nginx"
 
 tags = {
   environment      = "dev"

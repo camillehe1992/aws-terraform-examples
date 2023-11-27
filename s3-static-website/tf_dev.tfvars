@@ -1,5 +1,5 @@
 # General Deployment Variables
-env = "dev"
+environment = "dev"
 tags = {
   environment      = "dev"
   nickname         = "s3staticwebsite"

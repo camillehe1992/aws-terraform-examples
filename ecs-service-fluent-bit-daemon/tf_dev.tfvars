@@ -1,5 +1,5 @@
 # General Deployment Variables
-env      = "dev"
+environment      = "dev"
 nickname = "fluentd"
 
 tags = {
