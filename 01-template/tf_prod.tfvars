@@ -1,6 +1,6 @@
 # General Deployment Variables
-env      = "prod"
-nickname = "REPLACE_ME"
+environment = "prod"
+nickname    = "REPLACE_ME"
 
 tags = {
   environment      = "prod"
