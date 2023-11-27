@@ -62,3 +62,9 @@ variable "firehose_bucket_name" {
   default     = "firehose-streaming-ecs-logs-using-fluent-bit"
   description = "The S3 bucket name to collect ECS logs using Fluent bit"
 }
+
+variable "firehose_delivery_stream_name" {
+  type        = string
+  default     = "ecs-stream"
+  description = "The Firehose delivery stream name"
+}
