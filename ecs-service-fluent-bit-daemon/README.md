@@ -74,6 +74,17 @@ make plan
 make apply
 ```
 
+verify the Fluent Bit daemonset by peeking into the logs like so
+
+```text
+[2023/11/27 02:50:39] [ info] [cmetrics] version=0.3.7
+[2023/11/27 02:50:39] [ info] [input:forward:forward.0] listening on unix:///var/run/fluent.sock
+time="2023-11-27T02:50:39Z" level=info msg="[firehose 0] plugin parameter delivery_stream = 'ecs-stream'"
+time="2023-11-27T02:50:39Z" level=info msg="[firehose 0] plugin parameter region = 'ap-southeast-1'"
+...
+[2023/11/27 02:50:39] [ info] [sp] stream processor started
+```
+
 ## Local Destroy
 
 Run below commands to destroy resouces.
@@ -88,20 +99,41 @@ make apply
 
 ## Log Collection from ECS Service NGINX
 
-After deploying Fluent Bit as a DeamonSet in ECS Cluster, a task will be launched in each container instance for logging collection. I also deployed a NGINX ECS service in the ECS Cluster using `ecs-service-nginx` project to demonstrate Fluent Bit functionalities.
+After deploying Fluent Bit as a DeamonSet in ECS Cluster, deploy a NGINX ECS service in cluster using `ecs-service-nginx` project to demonstrate Fluent Bit functionalities.
 
 ![ecs-service](./ecs-services.png)
 
-Access the NGINX via NGINX load balancer DNS name, like `http://nginx-prod-xxxxxxxx.aws-region.elb.amazonaws.com/`. You should be redirected to the welcome page of NGINX.
+Access the NGINX via NGINX load balancer DNS name, like `http://nginx-prod-xxxxxxxx.aws-region.elb.amazonaws.com/`. You should be redirected to the welcome page of NGINX web server.
 
-## Create VPC Endpoint for Firehose
+Send requests to NGINX web server. Some log files will be uploaded to S3 bucket after a few minutes.
 
-Find the `fluentd` task logs from log stream named with prefix `fluentd/prod-fluentd-daemon` from CloudWatch Logs group `PROD-APP-ECS-CLUSTER`.
+## Create & Query Athena Table
 
-You may meet timeout errors when Fluent Bit push logs into Firehose stream as below. That's becuase the Fluent Bit task in VPC is trying to access Firehose outside of VPC via public internet. 
+Open Athena -> Query editor -> Tables and views. Click on `CREATE TABLE` from `Create` dropdown list. Paste below SQL expression into the SQL Query editor, and run the query to create a table named `fluentbit_ecs`.
 
-```text
-time="2023-11-27T02:12:28Z" level=error msg="[firehose 0] PutRecordBatch failed with RequestError: send request failed\ncaused by: Post \"https://firehose.cn-north-1.amazonaws.com.cn/\": dial tcp 52.81.167.128:443: i/o timeout"
+```sql
+CREATE EXTERNAL TABLE fluentbit_ecs (
+    agent string,
+    code string,
+    host string,
+    method string,
+    path string,
+    referer string,
+    remote string,
+    size string,
+    user string
+)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+LOCATION 's3://firehose-streaming-ecs-logs-using-fluent-bit/'
+```
+
+After done, query the table. For example, perform a SQL query to figure out who the top 10 users of our NGINX services are in the ECS cluster.
+
+```sql
+SELECT host, remote, path, count(remote) AS num_requests
+FROM fluentbit_ecs
+GROUP BY host, remote, path
+ORDER BY num_requests DESC LIMIT 10
 ```
 
 ## References
