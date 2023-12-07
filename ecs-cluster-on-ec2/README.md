@@ -50,6 +50,8 @@ Another option to specify value of variable is to provide the value in command w
 
 Update `DESIRED_SIZE` in .env file if you want to change the desired EC2 instances count in ECS Cluster. We only launch one instance for demo purpose.
 
+Update network related variables in `tf_dev.tf` or `tf_prod.tf`. They should be the default VPC, Subnets and Security Group in the AWS account that you want to deploy resources. For `image_id`, it should be ECS optimaized AMI from public images.
+
 Setup local development and AWS credentials following [README](../README.md) before you can deploy AWS resources using below commands.
 
 ```bash

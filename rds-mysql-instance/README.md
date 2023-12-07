@@ -43,6 +43,8 @@ Create a `.env` from `env.sample`, and update environment variables as needed. T
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
 
+Update network related variables in `tf_dev.tf` or `tf_prod.tf`. They should be the default VPC, Subnets and Security Group in the AWS account that you want to deploy resources.
+
 Setup local development and AWS credentials following [README](../README.md) before you can deploy AWS resources using below commands.
 
 ```bash
