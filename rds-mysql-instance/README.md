@@ -5,7 +5,7 @@ A terraform project that is used to create a MYSQL RDS instance in AWS, with the
 The AWS resources created in the project include:
 
 1. A RDS instance with custom parameter group. The database secret is managed in Secrets Manager
-2. A Lambda function and CloudWatch Logs group for function logs persistance
+2. A Lambda function and CloudWatch Logs group for function logs persistence
 3. A Lambda function execution IAM role with appropriate permissions
 
 The architecture diagram shows as below.
@@ -39,7 +39,7 @@ The architecture diagram shows as below.
 
 ## Local Deploy
 
-Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 
+Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables.
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
 
