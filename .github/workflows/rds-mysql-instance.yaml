@@ -24,7 +24,7 @@ on:
         default: false
         type: boolean
 
-run-name: Deploy to ${{ inputs.environment }} (destroy = {{ inputs.destroy }})
+run-name: ${{ format('Deploy to {0} (destroy = {1})', inputs.environment, inputs.destroy) }}
 
 permissions:
   contents: read
