@@ -26,4 +26,3 @@ cpu                               = 128
 memory                            = 128
 health_check                      = "/health"
 container_port                    = 80
-

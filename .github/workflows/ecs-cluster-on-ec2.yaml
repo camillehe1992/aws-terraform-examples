@@ -115,7 +115,7 @@ jobs:
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
-          else 
+          else
             exit 0
           fi
 
@@ -134,7 +134,7 @@ jobs:
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
-          else 
+          else
             exit 0
           fi
 

@@ -1,4 +1,3 @@
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret
 module "secrets" {
   source = "../01-modules/secret"
 

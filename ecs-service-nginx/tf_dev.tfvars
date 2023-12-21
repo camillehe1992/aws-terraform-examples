@@ -20,4 +20,3 @@ image             = "camillehe1992/nginx:latest"
 desired_count     = 1
 cpu               = 128
 memory            = 128
-

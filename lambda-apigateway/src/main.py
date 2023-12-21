@@ -9,6 +9,6 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
-        "body": json.dumps({"statusCode": 200,"data": f"Hello from {name}!"}),
-        "isBase64Encoded": False
+        "body": json.dumps({"statusCode": 200, "data": f"Hello from {name}!"}),
+        "isBase64Encoded": False,
     }

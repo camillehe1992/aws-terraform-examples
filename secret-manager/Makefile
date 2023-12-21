@@ -25,7 +25,7 @@ define DEFAULTS
 -var database_password=$(DATABASE_PASSWORD) \
 -refresh=true
 endef
- 
+
 override OPTIONS += $(DEFAULTS)
 
 lint:

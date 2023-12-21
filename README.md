@@ -112,8 +112,35 @@ Run the target workflow manually from GitHub console.
 
 ![GitHub Actions Workflow](./02-images/workflow.png)
 
+## Pre Commit
+
+`pre-commit` is a framework for managing and maintaining multi-language pre-commit hooks.
+
+### Installation
+
+```bash
+pip install pre-commit
+```
+
+### Add a pre-commit configuration
+
+There is a pre-commit configuration named `.pre-commit-config.yaml`. Update it as needed.
+
+### Install the git hook script
+
+```bash
+pre-commit install
+```
+
+### (optional) Run against all the files
+
+```bash
+pre-commit run --all-files
+```
+
 ## References
 
 - [Configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 - [Using secrets in GitHub Actions](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions)
 - [Creating secrets for an environment](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-an-environment)
+- [pre-commit](https://pre-commit.com/)

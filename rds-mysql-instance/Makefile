@@ -24,7 +24,7 @@ define DEFAULTS
 -var aws_region=$(AWS_REGION) \
 -refresh=true
 endef
- 
+
 override OPTIONS += $(DEFAULTS)
 
 lint:
@@ -57,7 +57,7 @@ apply: init
 	@$(TF) apply tfplan
 
 get-secret:
-	$(info [*] Retrieve DB secret from Secrets Manager)	
+	$(info [*] Retrieve DB secret from Secrets Manager)
 	aws secretsmanager get-secret-value \
 	--secret-id $(SECRET_ID) \
 	--query SecretString \
@@ -70,5 +70,4 @@ initialize-db:
 		--function-name ${FUNC_ARN} \
 		--cli-binary-format raw-in-base64-out \
 		--profile $(AWS_PROFILE) \
-		response.json	
-
+		response.json

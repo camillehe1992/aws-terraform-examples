@@ -10,4 +10,3 @@ tags = {
   emails           = "group@example.com"
   repo             = "https://github.com/camillehe1992/aws-terraform-examples"
 }
-

@@ -29,7 +29,7 @@ define DEFAULTS
 -var desired_count=$(DESIRED_COUNT) \
 -refresh=true
 endef
- 
+
 override OPTIONS += $(DEFAULTS)
 
 lint:

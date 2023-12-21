@@ -22,7 +22,7 @@ In a real project, we need to save sensitive information, such as password, secr
 
 ## Deploy from Local
 
-Follow [README](../README.md) to setup local enviroment for Terraform deployment. Then under `secret-manager` directory, run below commands to deploy current project into AWS account. 
+Follow [README](../README.md) to setup local enviroment for Terraform deployment. Then under `secret-manager` directory, run below commands to deploy current project into AWS account.
 
 ```bash
 make init

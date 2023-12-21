@@ -40,4 +40,3 @@ module "instance_terminating_lambda_execution_role" {
     allow-autoscaling-policy = data.aws_iam_policy_document.allow_container_instances_update_policy.json
   }
 }
-

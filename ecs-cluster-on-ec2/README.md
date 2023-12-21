@@ -37,7 +37,7 @@ The archtecture diagram shows as below.
 ├── README.md
 ├── ecs-cluster-on-ec2.png
 ├── ecs-container-draining.py   # Lambda source code
-├── ecs.sh                      # Launch template user data 
+├── ecs.sh                      # Launch template user data
 ├── tf_dev.tfvars               # Terraform variables per environments
 ├── tf_prod.tfvars
 ```

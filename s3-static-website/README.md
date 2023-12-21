@@ -20,7 +20,7 @@ A demo project to create an AWS S3 bucket for static website hosting using Terra
 
 ## Local Deploy
 
-Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables. 
+Create a `.env` from `env.sample`, and update environment variables as needed. The `.env` file won't be checked into your source code. After updated, these variables in `.env` will be injected into `Makefile` when you execute `make` commands. You can run `make check_env` to validate these variables.
 
 Another option to specify value of variable is to provide the value in command which has high priority than `.env`. For example, use `make ENVIRONMENT=prod check_env` to overwrite the `ENVIRONMENT` variable to `prod` instead of `dev` defined in `.env`.
 
@@ -34,9 +34,9 @@ make plan
 make apply
 
 # Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
-# 
+#
 # Outputs:
-# 
+#
 # website_endpoint = "docsy-portal-prod.s3-website-ap-southeast-1.amazonaws.com"
 ```
 
@@ -46,7 +46,7 @@ At this point, you will get `404 Not Found` if access the website via `website_e
 
 Run below commands to destroy resouces.
 
-> For this demo, you should empty the S3 bucket manually from AWS console or by AWS CLI before deleting bucket. Otherwise the destroy process will be hung up in the creating process until timeout.  
+> For this demo, you should empty the S3 bucket manually from AWS console or by AWS CLI before deleting bucket. Otherwise the destroy process will be hung up in the creating process until timeout.
 
 ```bash
 # Create a Terraform destroy plan named `tfplan`

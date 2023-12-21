@@ -24,7 +24,7 @@ define DEFAULTS
 -var aws_region=$(AWS_REGION) \
 -refresh=true
 endef
- 
+
 override OPTIONS += $(DEFAULTS)
 
 lint:
