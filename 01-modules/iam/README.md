@@ -1,80 +1,42 @@
-# Terraform Module Details
+# Module Overview
 
-## Variables
+The detailed information about the module.
 
-| Variable Name                  | Type         | Description                                                      | Default                  |
-| ------------------------------ | ------------ | ---------------------------------------------------------------- | ------------------------ |
-| tags                           | map(string)  | The key value pairs apply as tags to all resources in the module | {}                       |
-| name_prefix                    | string       | The prefix of the IAM role name                                  | empty string             |
-| role_name                      | string       | The name of IAM role                                             | LambdaExecutionRole      |
-| role_description               | string       | The description of IAM role                                      | empty string             |
-| assume_role_policy_identifiers | list(string) | The AWS service identitifers that are allowed to assume the role | ["lambda.amazonaws.com"] |
-| aws_managed_policy_arns        | set(string)  | A set of AWS managed policy ARN                                  | []                       |
-| customized_policies            | map(string)  | A map of JSON format of IAM policy                               | {}                       |
-| has_iam_instance_profile       | boolean      | If to create instance profile for the role                       | false                    | - |
+## Providers
 
-## Example Usage
+| Name | Version |
+| ---- | ------- |
+| aws  | n/a     |
 
-### Basic Usage
+The module automatically inherits default provider configurations from its parent.
 
-```bash
-module "lambda_execution_role" {
-  source = "../01-modules/iam"
+## Resources
 
-  name_prefix             = "dev-"
-  aws_managed_policy_arns = "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-```
+| Name                                                                                                                                                       | Type        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [aws_iam_instance_profile.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile)                          | resource    |
+| [aws_iam_policy.customized_policies](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy)                               | resource    |
+| [aws_iam_role.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                                  | resource    |
+| [aws_iam_role_policy_attachment.customized](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment)        | resource    |
+| [aws_iam_role_policy_attachment.managed](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment)           | resource    |
+| [aws_iam_policy_document.ecs_tasks_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition)                                          | data source |
 
-### IAM Role with Customized Configuration
+## Inputs
 
-```bash
-data "aws_iam_policy_document" "ecs_tasks_execution_role_inline_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-      "ecr:GetAuthorizationToken",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
-    ]
-    resources = ["*"]
-  }
-}
-
-module "lambda_execution_role" {
-  source = "../01-modules/iam"
-
-  tags = {
-    environment = "dev"
-    nickname    = "pokemon"
-  }
-
-  name_prefix             = "dev-"
-  role_name                   = "ecsTaskExecutionRole"
-  role_description            = "The task execution role grants the Amazon ECS container and Fargate agents permission to make AWS API calls on your behalf."
-  assume_role_policy_identifiers = ["ecs-tasks.amazonaws.com"]
-  aws_managed_policy_arns = [
-    "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:${data.aws_partition.current.partition}:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
-  ]
-  customized_policies = {
-    allow-cwlogs-ecr-policy = data.aws_iam_policy_document.ecs_tasks_execution_role_inline_policy.json
-  }
-  has_iam_instance_profile = true
-}
-```
+| Name                              | Description                                                      | Type           | Default                          | Required |
+| --------------------------------- | ---------------------------------------------------------------- | -------------- | -------------------------------- | :------: |
+| assume\_role\_policy\_identifiers | The AWS service identitifers that are allowed to assume the role | `list(string)` | ```[ "lambda.amazonaws.com" ]``` |    no    |
+| aws\_managed\_policy\_arns        | A set of AWS managed policy ARN                                  | `set(string)`  | `[]`                             |    no    |
+| customized\_policies              | A map of JSON format of IAM policy                               | `map(string)`  | `{}`                             |    no    |
+| has\_iam\_instance\_profile       | If to create instance profile for the role                       | `bool`         | `false`                          |    no    |
+| name\_prefix                      | The prefix of the IAM role name                                  | `string`       | `""`                             |    no    |
+| role\_description                 | The description of IAM role                                      | `string`       | `""`                             |    no    |
+| role\_name                        | The name of IAM role                                             | `string`       | `"LambdaExecutionRole"`          |    no    |
+| tags                              | The key value pairs apply as tags to all resources in the module | `map(string)`  | `{}`                             |    no    |
 
 ## Outputs
 
-```bash
-output "iam_role" {
-  value = {
-    arn  = aws_iam_role.this.arn
-    id   = aws_iam_role.this.id
-    name = aws_iam_role.this.name
-  }
-}
-```
+| Name      | Description |
+| --------- | ----------- |
+| iam\_role | n/a         |

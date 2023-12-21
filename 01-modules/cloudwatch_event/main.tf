@@ -1,3 +1,7 @@
+/**
+  CloudWatch Event Module
+*/
+
 # https://registry.terraform.io/providers/hashicorp/aws/5.0.0/docs/resources/cloudwatch_event_rule
 resource "aws_cloudwatch_event_rule" "this" {
   name                = "${var.environment}-${var.nickname}-${var.rule_name}"

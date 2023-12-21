@@ -1,77 +1,51 @@
-# Terraform Module Details
+# Module Overview
 
-## Variables
+The detailed information about the module.
 
-| Variable Name         | Type          | Description                                                                  | Default      |
-| --------------------- | ------------- | ---------------------------------------------------------------------------- | ------------ |
-| environment           | string        | The environment of application                                               | -            |
-| nickname              | string        | The nickname of application. Must be lowercase without special chars         | -            |
-| tags                  | map(string)   | The key value pairs we want to apply as tags to the resources in this module | {}           |
-| function_name         | string        | The Lambda function name                                                     | -            |
-| description           | string        | The description of Lambda function                                           | empty string |
-| role_arn              | string        | The ARN of Lambda function excution role                                     | -            |
-| handler               | string        | The handler of Lambda function                                               | -            |
-| memory_size           | number        | The memory size (MiB) of Lambda function                                     | 128          |
-| timeout               | number        | The timeout (seconds) of Lambda function                                     | 60           |
-| runtime               | string        | The runtime of Lambda function                                               | python3.9    |
-| source_file           | string        | The file name of Lambda function source code                                 | -            |
-| source_dir            | string        | The directory of Lambda function source code. Conflict with source_file      | -            |
-| output_path           | string        | The zip file name of Lambda function source code                             | -            |
-| layers                | list(string)  | A list of Lambda function associated layers ARN                              | []           |
-| environment_variables | map(string)   | A set of environment variables of Lambda function                            | {}           |
-| subnet_ids            | list(string)  | A list of Subnet Ids                                                         | []           |
-| security_group_ids    | list(string)  | A list of Security group Idsfunction                                         | []           |
-| retention_in_days     | number        | The retention (days) of Lambda function Cloudwatch logs group                | 14           |
-| lambda_permissions    | map(object()) | A map of lambda permissions                                                  | -            |
+## Providers
 
-## Example Usage
+| Name    | Version |
+| ------- | ------- |
+| archive | n/a     |
+| aws     | n/a     |
 
-```bash
-module "interact_database_func" {
-  source = "../01-modules/lambda"
+The module automatically inherits default provider configurations from its parent.
 
- environment  = "dev"
-  nickname    = "pokemon"
-  tags = {
-    environment = "dev"
-    nickname    = "pokemon"
-  }
+## Resources
 
-  function_name = "my-demo-function"
-  description   = "The function is used to access RDS database"
-  role_arn      = "arn:aws-cn:iam::123456789012:role/lambda-execution-role-name"
-  handler       = "src.app.lambda_handler"
-  memory_size   = 128
-  timeout       = 10
-  runtime       = "python3.9"
-  source_file   = "./src/app.py"
-  output_path   = "app.zip"
-  layers = [
-    "arn:aws-cn:lambda:cn-north-1:123456789012:layer:aws-lambda-powertools-python:7"
-  ]
-  environment_variables = {
-    LOG_LEVEL = "info"
-  }
-  subnet_ids            = ["subnet-123", "subnet-456"]
-  security_group_ids    = ["sg-789"]
-  retention_in_days     = 14
-  lambda_permissions = {
-    allow-apigateway-invoke = {
-      principal  = "apigateway.amazonaws.com",
-      source_arn = "arn:aws-cn:execute-api:cn-north-1:123456789012:xxxxxxxx/*/*/*"
-    }
-  }
-}
+| Name                                                                                                                              | Type        |
+| --------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource    |
+| [aws_lambda_function.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function)           | resource    |
+| [aws_lambda_permission.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission)       | resource    |
+| [archive_file.this](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file)                      | data source |
 
-```
+## Inputs
+
+| Name                   | Description                                                                            | Type                                                          | Default       | Required |
+| ---------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------- | :------: |
+| description            | The description of Lambda function                                                     | `string`                                                      | `""`          |    no    |
+| environment            | The environment of application                                                         | `string`                                                      | n/a           |   yes    |
+| environment\_variables | A set of environment variables of Lambda function                                      | `map(string)`                                                 | `{}`          |    no    |
+| function\_name         | The Lambda function name                                                               | `string`                                                      | n/a           |   yes    |
+| handler                | The handler of Lambda function                                                         | `string`                                                      | n/a           |   yes    |
+| lambda\_permissions    | A map of lambda permissions                                                            | ```map(object({ principal = string source_arn = string }))``` | `{}`          |    no    |
+| layers                 | A list of Lambda function associated layers ARN                                        | `list(string)`                                                | `[]`          |    no    |
+| memory\_size           | The memory size (MiB) of Lambda function                                               | `number`                                                      | `128`         |    no    |
+| nickname               | The nickname of application. Must be lowercase without special chars                   | `string`                                                      | n/a           |   yes    |
+| output\_path           | The zip file name of Lambda function source code                                       | `string`                                                      | n/a           |   yes    |
+| retention\_in\_days    | The retention (days) of Lambda function Cloudwatch logs group                          | `number`                                                      | `14`          |    no    |
+| role\_arn              | The ARN of Lambda function excution role                                               | `string`                                                      | n/a           |   yes    |
+| runtime                | The runtime of Lambda function                                                         | `string`                                                      | `"python3.9"` |    no    |
+| security\_group\_ids   | A list of Security group Ids                                                           | `list(string)`                                                | `[]`          |    no    |
+| source\_dir            | The source dir of Lambda function source code. Conflict with source\_file              | `string`                                                      | `null`        |    no    |
+| source\_file           | The file name of Lambda function source code                                           | `string`                                                      | `null`        |    no    |
+| subnet\_ids            | A list of Subnet Ids                                                                   | `list(string)`                                                | `[]`          |    no    |
+| tags                   | The key value pairs we want to apply as tags to the resources contained in this module | `map(string)`                                                 | `{}`          |    no    |
+| timeout                | The timeout (seconds) of Lambda function                                               | `number`                                                      | `60`          |    no    |
 
 ## Outputs
 
-```bash
-output "function" {
-  value = {
-    arn          = aws_lambda_function.this.arn
-    cwlogs_group = aws_cloudwatch_log_group.this.arn
-  }
-}
-```
+| Name     | Description |
+| -------- | ----------- |
+| function | n/a         |

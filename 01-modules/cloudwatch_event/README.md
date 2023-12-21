@@ -1,45 +1,38 @@
-# Terraform Module Details
+# Module Overview
 
-## Variables
+The detailed information about the module.
 
-| Variable Name       | Type        | Description                                                                  | Default      |
-| ------------------- | ----------- | ---------------------------------------------------------------------------- | ------------ |
-| environment         | string      | The environment of application                                               | -            |
-| nickname            | string      | The nickname of application. Must be lowercase without special chars         | -            |
-| tags                | map(string) | The key value pairs we want to apply as tags to the resources in this module | {}           |
-| rule_name           | string      | The EventBridge rule name                                                    | -            |
-| description         | string      | The description of EventBridge rule                                          | empty string |
-| schedule_expression | string      | The schedule expression to trigger the target                                | -            |
-| is_enabled          | bool        | If enable the EventBridge rule                                               | true         |
-| target_id           | string      | The target id of the EventBridge rule                                        | empty string |
-| target_arn          | string      | The target ARN of the EventBridge rule                                       | -            |
+## Providers
 
-## Example Usage
+| Name | Version |
+| ---- | ------- |
+| aws  | n/a     |
 
-### Basic Usage
+The module automatically inherits default provider configurations from its parent.
 
-```bash
-module "event_rule" {
-  source = "../01-modules/cloudwatch_event"
+## Resources
 
-  environment = "dev"
-  nickname    = "nickname"
-  tags = {
-    environment = "dev"
-    nickname    = "nickname"
-  }
+| Name                                                                                                                                    | Type     |
+| --------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| [aws_cloudwatch_event_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)     | resource |
+| [aws_cloudwatch_event_target.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 
-  rule_name = "my-event-rule-name"
-  description = "The description of my event rule"
-  schedule_expression = "rate(1 day)"
-  target_id  = "sendToSNS"
-  target_arn = ""
-}
-```
+## Inputs
+
+| Name                 | Description                                                                            | Type          | Default | Required |
+| -------------------- | -------------------------------------------------------------------------------------- | ------------- | ------- | :------: |
+| description          | The description of EventBridge rule                                                    | `string`      | `""`    |    no    |
+| environment          | The environment of application                                                         | `string`      | n/a     |   yes    |
+| is\_enabled          | If enable the EventBridge rule                                                         | `bool`        | `true`  |    no    |
+| nickname             | The nickname of application. Must be lowercase without special chars                   | `string`      | n/a     |   yes    |
+| rule\_name           | The EventBridge rule name                                                              | `string`      | n/a     |   yes    |
+| schedule\_expression | The schedule expression to trigger the target                                          | `string`      | n/a     |   yes    |
+| tags                 | The key value pairs we want to apply as tags to the resources contained in this module | `map(string)` | n/a     |   yes    |
+| target\_arn          | The target ARN of the EventBridge rule                                                 | `string`      | n/a     |   yes    |
+| target\_id           | The target id of the EventBridge rule                                                  | `string`      | `""`    |    no    |
 
 ## Outputs
 
-```bash
-event_rule = "arn:aws-cn:events:cn-north-1:123456789012:rule/dev-nickname-my-event-rule-name"
-
-```
+| Name        | Description               |
+| ----------- | ------------------------- |
+| event\_rule | The CloudWatch Event rule |
