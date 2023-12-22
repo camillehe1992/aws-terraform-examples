@@ -133,6 +133,13 @@ jobs:
           name: tfplan
           path: ${{ env.WORKING_DIRECTORY }}/tfplan
 
+      # Save custom zip file to artifacts
+      - name: Publish Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: custom.zip
+          path: ${{ env.WORKING_DIRECTORY }}/build/custom.zip
+
       # Create string output of Terraform Plan
       - name: Create String Output
         id: tf-plan-string
@@ -192,6 +199,13 @@ jobs:
         with:
           name: tfplan
           path: ${{ env.WORKING_DIRECTORY }}
+
+      # Download saved custom zip file from artifacts
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v3
+        with:
+          name: custom.zip
+          path: ${{ env.WORKING_DIRECTORY }}/build
 
       # Terraform Apply
       - name: Terraform Apply
