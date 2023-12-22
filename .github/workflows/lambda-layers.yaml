@@ -134,7 +134,7 @@ jobs:
           path: ${{ env.WORKING_DIRECTORY }}/tfplan
 
       # Save custom zip file to artifacts
-      - name: Publish Terraform Plan
+      - name: Publish Custom Zip File
         uses: actions/upload-artifact@v3
         with:
           name: custom.zip
@@ -201,7 +201,7 @@ jobs:
           path: ${{ env.WORKING_DIRECTORY }}
 
       # Download saved custom zip file from artifacts
-      - name: Download Terraform Plan
+      - name: Download Custom Zip File
         uses: actions/download-artifact@v3
         with:
           name: custom.zip
