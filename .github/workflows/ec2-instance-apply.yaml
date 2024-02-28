@@ -6,12 +6,11 @@ on:
       - main
     inputs:
       environment:
-        description: Environment to run agains
+        description: Environment to run against
         type: choice
         options:
-          - dev
           - prod
-        default: dev
+        default: prod
         required: true
       destroy:
         description: True to destroy
@@ -33,7 +32,6 @@ jobs:
       environment: ${{ inputs.environment }}
       nickname: ec2instance
       working-directory: ec2-instance
-      tf-version: 1.4.2
   destroy:
     if: ${{ inputs.destroy == true }}
     uses: camillehe1992/reusable-workflows/.github/workflows/terraform-destroy-reusable.yaml@main
@@ -41,4 +39,3 @@ jobs:
       environment: ${{ inputs.environment }}
       nickname: ec2instance
       working-directory: ec2-instance
-      tf-version: 1.4.2
