@@ -6,7 +6,7 @@ on:
       - main
     inputs:
       environment:
-        description: Environment to run agains
+        description: Environment to run against
         type: choice
         options:
           - dev
@@ -15,11 +15,6 @@ on:
         required: true
       destroy:
         description: True to destroy
-        required: true
-        default: false
-        type: boolean
-      force:
-        description: True to force apply
         required: true
         default: false
         type: boolean
