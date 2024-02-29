@@ -28,6 +28,7 @@ jobs:
   deploy:
     if: ${{ inputs.destroy == false }}
     uses: camillehe1992/reusable-workflows/.github/workflows/terraform-deploy-reusable.yaml@main
+    secrets: inherit
     with:
       environment: ${{ inputs.environment }}
       nickname: ec2instance
@@ -35,6 +36,7 @@ jobs:
   destroy:
     if: ${{ inputs.destroy == true }}
     uses: camillehe1992/reusable-workflows/.github/workflows/terraform-destroy-reusable.yaml@main
+    secrets: inherit
     with:
       environment: ${{ inputs.environment }}
       nickname: ec2instance
