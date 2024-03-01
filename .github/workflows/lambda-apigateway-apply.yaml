@@ -32,8 +32,8 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       nickname: lambdaapigateway
-      working-directory: lambda-apigateway
       packages-directory: lambda-apigateway/build
+      working-directory: lambda-apigateway
   destroy:
     if: ${{ inputs.destroy == true }}
     uses: camillehe1992/reusable-workflows/.github/workflows/terraform-destroy-reusable.yaml@main
@@ -41,4 +41,5 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       nickname: lambdaapigateway
-      working-directory: lambda-apigateway/build
+      packages-directory: lambda-apigateway/build
+      working-directory: lambda-apigateway

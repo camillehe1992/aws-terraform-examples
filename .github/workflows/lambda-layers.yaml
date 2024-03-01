@@ -32,8 +32,8 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       nickname: lambda-layers
-      working-directory: lambda-layers
       packages-directory: lambda-layers/build
+      working-directory: lambda-layers
 
   destroy:
     if: ${{ inputs.destroy == true }}
@@ -42,5 +42,5 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       nickname: lambda-layers
-      working-directory: lambda-layers
       packages-directory: lambda-layers/build
+      working-directory: lambda-layers
