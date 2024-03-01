@@ -19,9 +19,8 @@ on:
         description: Environment to run against
         type: choice
         options:
-          - dev
           - prod
-        default: dev
+        default: prod
         required: true
       destroy:
         description: True to destroy
