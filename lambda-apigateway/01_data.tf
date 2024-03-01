@@ -8,7 +8,7 @@ data "archive_file" "function_source" {
   type = "zip"
 
   source_dir  = "${path.module}/src"
-  output_path = "${path.module}/${var.function_name}.zip"
+  output_path = "${path.module}/build/${var.function_name}.zip"
 }
 
 data "local_file" "openapi_spec" {

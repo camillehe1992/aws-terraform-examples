@@ -1,7 +1,7 @@
 // Lambda Function
 resource "aws_lambda_function" "this" {
   function_name    = "${var.environment}-${var.nickname}-${var.function_name}"
-  filename         = "${path.module}/${var.function_name}.zip"
+  filename         = "${path.module}/build/${var.function_name}.zip"
   runtime          = var.runtime
   handler          = "main.lambda_handler"
   source_code_hash = data.archive_file.function_source.output_base64sha256

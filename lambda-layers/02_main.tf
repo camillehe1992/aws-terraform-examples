@@ -17,7 +17,7 @@ module "custom_lambda_layer" {
   nickname    = var.nickname
   tags        = var.tags
 
-  layer_name  = "custom"
+  layer_name  = "core"
   source_path = "core"
   is_custom   = true
   from_local  = true
