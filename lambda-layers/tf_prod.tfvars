@@ -12,3 +12,4 @@ tags = {
 }
 
 # Project Specific Variables
+s3_bucket = "terraform-state-ap-southeast-1-bucket"
