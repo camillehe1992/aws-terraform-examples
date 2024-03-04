@@ -6,7 +6,7 @@ variable "aws_region" {
 
 variable "aws_profile" {
   type        = string
-  default     = null
+  default     = "default"
   description = "AWS profile which used for terraform infra deployment"
 }
 
