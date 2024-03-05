@@ -47,9 +47,10 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
   AWS_REGION: ${{ vars.AWS_REGION }}
-  STATE_BUCKET: ${{ vars.STATE_BUCKET }}
   ENVIRONMENT: ${{ inputs.environment }}
   NICKNAME: ecs-service-nginx
+  TF_VERSION: 1.4.2
+  STATE_BUCKET: ${{ vars.STATE_BUCKET }}
   WORKING_DIRECTORY: ecs-service-nginx
   # Project Specific Env Variables
   DESIRED_COUNT: ${{ inputs.desired_count }}
