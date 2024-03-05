@@ -25,17 +25,19 @@ permissions:
   pull-requests: write
 
 jobs:
-  deploy:
-    if: ${{ inputs.destroy == false }}
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-deploy-reusable.yaml@main
+  plan:
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@main
     secrets: inherit
     with:
+      destroy: ${{ inputs.destroy }}
       environment: ${{ inputs.environment }}
       nickname: network
       working-directory: three-layers-network
-  destroy:
-    if: ${{ inputs.destroy == true }}
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-destroy-reusable.yaml@main
+
+  apply:
+    needs: [plan]
+    if: ${{ needs.plan.outputs.exitcode == 2 }}
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}

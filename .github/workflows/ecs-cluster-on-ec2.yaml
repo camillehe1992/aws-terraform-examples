@@ -61,7 +61,7 @@ jobs:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
     outputs:
-      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+      exitcode: ${{ steps.tf-plan.outputs.exitcode }}
 
     steps:
       # Checkout the repository to the GitHub Actions runner
@@ -178,7 +178,7 @@ jobs:
 
   terraform-apply:
     name: Terraform Apply
-    if: ${{ inputs.force == true }} || needs.terraform-plan.outputs.tfplanExitCode == 2
+    if: ${{ inputs.force == true }} || needs.terraform-plan.outputs.exitcode == 2
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     needs: [terraform-plan]
