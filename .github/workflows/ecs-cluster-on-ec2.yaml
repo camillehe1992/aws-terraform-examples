@@ -41,19 +41,19 @@ permissions:
 
 env:
   # Common Env Variables
-  AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
-  AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-  AWS_ACCOUNT: "${{ vars.AWS_ACCOUNT }}"
-  AWS_REGION: "${{ vars.AWS_REGION }}"
-  STATE_BUCKET: "${{ vars.STATE_BUCKET }}"
-  ENVIRONMENT: "${{ inputs.environment }}"
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  STATE_BUCKET: ${{ vars.STATE_BUCKET }}
+  ENVIRONMENT: ${{ inputs.environment }}
   NICKNAME: ecs-cluster-on-ec2
   WORKING_DIRECTORY: ecs-cluster-on-ec2
   # Project Specific Env Variables
-  DESIRED_SIZE: "${{ inputs.asg_desired_size }}"
+  DESIRED_SIZE: ${{ inputs.asg_desired_size }}
 
 jobs:
-  terraform-plan:
+  plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
@@ -176,49 +176,11 @@ jobs:
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
-  terraform-apply:
-    name: Terraform Apply
-    if: ${{ inputs.force == true }} || needs.terraform-plan.outputs.exitcode == 2
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    needs: [terraform-plan]
-
-    steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-          terraform_version: ${{ env.TF_VERSION }}
-
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: |
-          terraform init -reconfigure \
-          -backend-config="bucket=$STATE_BUCKET" \
-          -backend-config="region=$AWS_REGION" \
-          -backend-config="key=$NICKNAME/$ENVIRONMENT/$AWS_REGION/terraform.tfstate"
-
-      # Download saved plan from artifacts
-      - name: Download Terraform Plan
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ env.WORKING_DIRECTORY }}
-
-      # Download saved ecs-container-draining.zip from artifacts
-      - name: Download Terraform Plan
-        uses: actions/download-artifact@v4
-        with:
-          name: ecs-container-draining.zip
-          path: ${{ env.WORKING_DIRECTORY }}
-
-      # Terraform Apply
-      - name: Terraform Apply
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: terraform apply -auto-approve tfplan
+  apply:
+    needs: [plan]
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      nickname: ecs-cluster-on-ec2
+      working-directory: ecs-cluster-on-ec2

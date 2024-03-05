@@ -43,16 +43,16 @@ permissions:
 
 env:
   # Common Env Variables
-  AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}"
-  AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-  AWS_ACCOUNT: "${{ vars.AWS_ACCOUNT }}"
-  AWS_REGION: "${{ vars.AWS_REGION }}"
-  STATE_BUCKET: "${{ vars.STATE_BUCKET }}"
-  ENVIRONMENT: "${{ inputs.environment }}"
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  STATE_BUCKET: ${{ vars.STATE_BUCKET }}
+  ENVIRONMENT: ${{ inputs.environment }}
   NICKNAME: ecs-service-nginx
   WORKING_DIRECTORY: ecs-service-nginx
   # Project Specific Env Variables
-  DESIRED_COUNT: "${{ inputs.desired_count }}"
+  DESIRED_COUNT: ${{ inputs.desired_count }}
 
 jobs:
   terraform-plan:
