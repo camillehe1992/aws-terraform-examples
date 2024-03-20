@@ -8,7 +8,7 @@ resource "aws_security_group" "allow_tls" {
   }
 }
 
-module "security_group" {
+module "security_group_rules" {
   source = "../01-modules/sg_rules"
 
   environment = var.environment

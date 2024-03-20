@@ -4,7 +4,7 @@ output "security_group_id" {
 
 output "sg_rules" {
   value = {
-    ingress = module.security_group.ingress
-    egress  = module.security_group.egress
+    ingress = module.security_group_rules.ingress
+    egress  = module.security_group_rules.egress
   }
 }

@@ -56,6 +56,6 @@ apply: init
 	$(info [*] Apply Terrafrom Infra)
 	@$(TF) apply tfplan
 
-deploy:
+deploy: init:
 	@$(TF) plan $(OPTIONS) -out tfplan
 	@$(TF) apply tfplan
