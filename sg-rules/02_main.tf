@@ -17,52 +17,10 @@ module "security_group" {
 
   security_group_id = aws_security_group.allow_tls.id
 
-  ingress_prefix_lists = concat(data.aws_ec2_managed_prefix_lists.this.ids, [
-    "pl-67a5400e",
-  ])
-
-  ingress_referenced_sg_ids = concat(data.aws_security_groups.default.ids, [])
-
-  ingress_cidrs = [
-    {
-      type = "cidr_ipv4",
-      value = {
-        cidr        = "172.31.0.0/16"
-        from_port   = 443
-        to_port     = 443
-        ip_protocol = "tcp"
-      }
-    },
-    {
-      type = "cidr_ipv4",
-      value = {
-        cidr        = "172.31.0.0/16"
-        from_port   = 80
-        to_port     = 80
-        ip_protocol = "tcp"
-      }
-    }
-  ]
+  ingress_prefix_lists      = concat(data.aws_ec2_managed_prefix_lists.this.ids, var.ingress_prefix_lists)
+  ingress_referenced_sg_ids = concat(data.aws_security_groups.default.ids, var.ingress_referenced_sg_ids)
+  ingress_cidrs             = var.ingress_cidrs
 
   egress_referenced_sg_ids = []
-
-  egress_cidrs = [
-    {
-      type = "cidr_ipv4",
-      value = {
-        cidr        = "0.0.0.0/0"
-        from_port   = null
-        to_port     = null
-        ip_protocol = "-1"
-      }
-    },
-    {
-      type = "cidr_ipv6",
-      value = {
-        cidr        = "::/0"
-        from_port   = null
-        to_port     = null
-        ip_protocol = "-1"
-      }
-  }]
+  egress_cidrs             = var.egress_cidrs
 }

@@ -27,17 +27,15 @@ variable "tags" {
 
 # Project Specific Variables
 variable "ingress_prefix_lists" {
-  type = set(string)
-  default = [
-    "pl-67a5400e"
-  ]
-  description = "A set of prefix list for com.amazonaws.ap-southeast-1.dynamodb"
+  type        = list(string)
+  default     = []
+  description = "A list of prefix list for com.amazonaws.ap-southeast-1.dynamodb"
 }
 
 variable "ingress_referenced_sg_ids" {
-  type        = set(string)
+  type        = list(string)
   default     = []
-  description = "A set of referenced SG id for ingress"
+  description = "A list of referenced SG id for ingress"
 }
 
 variable "ingress_cidrs" {
@@ -50,31 +48,12 @@ variable "ingress_cidrs" {
       ip_protocol = string
     })
   }))
-  default = [
-    {
-      type = "cidr_ipv4",
-      value = {
-        cidr        = "172.31.0.0/16"
-        from_port   = 443
-        to_port     = 443
-        ip_protocol = "tcp"
-      }
-    },
-    {
-      type = "cidr_ipv4",
-      value = {
-        cidr        = "172.31.0.0/16"
-        from_port   = 80
-        to_port     = 80
-        ip_protocol = "tcp"
-      }
-    }
-  ]
+  default     = []
   description = "A map of CIDR for ingress"
 }
 
 variable "egress_referenced_sg_ids" {
-  type        = set(string)
+  type        = list(string)
   default     = []
   description = "A set of referenced SG ids for egress"
 }
@@ -89,24 +68,6 @@ variable "egress_cidrs" {
       ip_protocol = string
     })
   }))
-  default = [
-    {
-      type = "cidr_ipv4",
-      value = {
-        cidr        = "0.0.0.0/0"
-        from_port   = 0
-        to_port     = 0
-        ip_protocol = "-1"
-      }
-    },
-    {
-      type = "cidr_ipv6",
-      value = {
-        cidr        = "::/0"
-        from_port   = 0
-        to_port     = 0
-        ip_protocol = "-1"
-      }
-  }]
+  default     = []
   description = "A map of CIDR for egress"
 }
