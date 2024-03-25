@@ -15,7 +15,6 @@ variable "tags" {
 }
 
 # Project Specific Variables
-
 variable "security_group_id" {
   type        = string
   description = "The id of SG"
