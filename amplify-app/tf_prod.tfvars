@@ -1,9 +1,9 @@
 # General Deployment Variables
-environment = "dev"
+environment = "prod"
 nickname    = "REPLACE_ME"
 
 tags = {
-  environment      = "dev"
+  environment      = "prod"
   nickname         = "REPLACE_ME"
   application_name = "REPLACE_ME"
   application_desc = "REPLACE_ME"
