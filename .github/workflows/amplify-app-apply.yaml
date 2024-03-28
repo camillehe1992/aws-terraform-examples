@@ -1,0 +1,45 @@
+name: Amplify Apply
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+    inputs:
+      environment:
+        description: Environment to run against
+        type: choice
+        options:
+          - prod
+        default: prod
+        required: true
+      destroy:
+        description: True to destroy
+        required: true
+        default: false
+        type: boolean
+
+run-name: ${{ format('Deploy to {0} (destroy = {1})', inputs.environment, inputs.destroy) }}
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@main
+    secrets: inherit
+    with:
+      destroy: ${{ inputs.destroy }}
+      environment: ${{ inputs.environment }}
+      nickname: amplify-react-graphql
+      working-directory: amplify-app
+
+  apply:
+    needs: [plan]
+    if: ${{ needs.plan.outputs.exitcode == 2 }}
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      nickname: amplify-react-graphql
+      working-directory: amplify-app
