@@ -22,6 +22,7 @@ define DEFAULTS
 -var-file=$(VAR_FILE) \
 -var aws_profile=$(AWS_PROFILE) \
 -var aws_region=$(AWS_REGION) \
+-var access_token=$(PERSONAL_ACCESS_TOKEN) \
 -refresh=true
 endef
 
@@ -55,3 +56,9 @@ plan-destroy: init
 apply: init
 	$(info [*] Apply Terrafrom Infra)
 	@$(TF) apply tfplan
+
+quick-deploy:
+	make plan && terraform apply tfplan
+
+quick-destroy:
+	make plan-destroy && terraform apply tfplan

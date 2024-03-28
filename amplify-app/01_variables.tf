@@ -26,3 +26,13 @@ variable "tags" {
 }
 
 # Project Specific Variables
+variable "repository" {
+  type        = string
+  description = "The repository for source code"
+  default     = "https://github.com/camillehe1992/aws-terraform-examples"
+}
+variable "access_token" {
+  type        = string
+  description = "The personal access token for authentication"
+  sensitive   = true
+}
