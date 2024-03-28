@@ -55,3 +55,9 @@ plan-destroy: init
 apply: init
 	$(info [*] Apply Terrafrom Infra)
 	@$(TF) apply tfplan
+
+quick-deploy:
+	make plan && cd terraform && terraform apply tfplan
+
+quick-destroy:
+	make pla-destroy && cd terraform && terraform apply tfplan
