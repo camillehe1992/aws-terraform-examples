@@ -24,16 +24,134 @@ permissions:
   contents: read
   pull-requests: write
 
+env:
+  # Common Env Variables
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  ENVIRONMENT: ${{ inputs.environment }}
+  NICKNAME: amplify-react-graphql
+  TF_VERSION: 1.4.2
+  STATE_BUCKET: ${{ vars.STATE_BUCKET }}
+  WORKING_DIRECTORY: amplify-app
+  # Terraform Variables are prefixed with TF_VAR
+  TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+  TF_VAR_access_token: ${{ secrets.TF_VAR_PERSONAL_ACCESS_TOKEN }}
+
 jobs:
   plan:
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@main
-    secrets: inherit
-    with:
-      destroy: ${{ inputs.destroy }}
-      environment: ${{ inputs.environment }}
-      nickname: amplify-react-graphql
-      working-directory: amplify-app
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      #this is needed since we are running terraform with read-only permissions
+      ARM_SKIP_PROVIDER_REGISTRATION: true
+    outputs:
+      exitcode: ${{ steps.tf-plan.outputs.exitcode }}
 
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Install the latest version of the Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          terraform init -reconfigure \
+          -backend-config="bucket=$STATE_BUCKET" \
+          -backend-config="region=$AWS_REGION" \
+          -backend-config="key=$NICKNAME/$ENVIRONMENT/$AWS_REGION/terraform.tfstate"
+
+      # Checks that all Terraform configuration files adhere to a canonical format
+      # Will fail the build if not
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      # Generates an execution plan for Terraform
+      # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
+      - name: Terraform Plan
+        if: ${{ inputs.destroy == false }}
+        id: tf-plan
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          export exitcode=0
+          terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
+          -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+          if [ $exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          else
+            exit 0
+          fi
+
+      - name: Terraform Plan - Destroy
+        if: ${{ inputs.destroy == true }}
+        id: tf-plan-destroy
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          export exitcode=0
+          terraform plan -destroy -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
+          -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+          if [ $exitcode -eq 1 ]; then
+            echo Terraform Plan Failed!
+            exit 1
+          else
+            exit 0
+          fi
+
+      # Save plan to artifacts
+      - name: Publish Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: ${{ env.WORKING_DIRECTORY }}/tfplan
+
+      # Create string output of Terraform Plan
+      - name: Create String Output
+        id: tf-plan-string
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "### Terraform Plan Output" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
+
+      # Publish Terraform Plan as task summary
+      - name: Publish Terraform Plan to Task Summary
+        env:
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
   apply:
     needs: [plan]
     if: ${{ needs.plan.outputs.exitcode == 2 }}
