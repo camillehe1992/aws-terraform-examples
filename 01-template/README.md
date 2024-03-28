@@ -8,14 +8,14 @@ todo
 .
 ├── .env.sample                     # file for environment variables
 ├── .terraform.lock.hcl
-├── 01_variables.tf                 # All file with .tf extension are Terraform related
-├── 01_versions.tf
-├── 02_main.tf                      # Use modules for AWS resoures
-├── 03_outputs.tf
+# All file with .tf extension are Terraform related
+├── 01_variables.tf                 # Terraform variables
+├── 01_versions.tf                  # Terraform providers and versions
+├── 02_main.tf                      # Terraform resources
+├── 03_outputs.tf                   # Terraform outputs
 ├── Makefile                        # Make scripts
 ├── README.md
-├── tf_dev.tfvars                   # Terraform variables per env
-├── tf_prod.tfvars
+├── tf_prod.tfvars                  # Terraform variables for specific environment
 ```
 
 ## Local Deploy
@@ -32,6 +32,9 @@ make plan
 
 # Apply the plan `tfplan`
 make apply
+
+# For quick plan & apply
+make quick-deploy
 ```
 
 ## Local Destroy
@@ -44,6 +47,9 @@ make plan-destroy
 
 # Apply the destroy plan `tfplan`
 make apply
+
+# For quick plan-destory & apply
+make quick-destroy
 ```
 
 ## GitHub Actions
