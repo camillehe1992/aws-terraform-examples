@@ -167,4 +167,5 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       nickname: ecs-cluster-on-ec2
+      packages-directory: ecs-cluster-on-ec2
       working-directory: ecs-cluster-on-ec2
