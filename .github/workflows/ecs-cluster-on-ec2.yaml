@@ -53,6 +53,8 @@ env:
   WORKING_DIRECTORY: ecs-cluster-on-ec2
   # Project Specific Env Variables
   DESIRED_SIZE: ${{ inputs.asg_desired_size }}
+  # Terraform Variables are prefixed with TF_VAR
+  TF_VAR_aws_region: ${{ vars.AWS_REGION }}
 
 jobs:
   plan:
