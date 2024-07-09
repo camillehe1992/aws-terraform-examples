@@ -1,7 +1,8 @@
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/amplify_app
 resource "aws_amplify_app" "this" {
-  name                        = var.nickname
-  repository                  = var.repository
-  access_token                = var.access_token
+  name       = var.nickname
+  repository = var.repository
+  # access_token                = var.access_token
   enable_branch_auto_deletion = true
   enable_branch_auto_build    = true
   build_spec                  = file("${path.module}/build.yaml")
