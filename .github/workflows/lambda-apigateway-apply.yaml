@@ -23,6 +23,7 @@ run-name: ${{ format('Deploy to {0} (destroy = {1})', inputs.environment, inputs
 permissions:
   contents: read
   pull-requests: write
+  id-token: write
 
 jobs:
   plan:
