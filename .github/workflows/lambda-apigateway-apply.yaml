@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   plan:
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@main
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@develop
     secrets: inherit
     with:
       destroy: ${{ inputs.destroy }}
@@ -37,7 +37,7 @@ jobs:
   apply:
     needs: [plan]
     if: ${{ needs.plan.outputs.exitcode == 2 }}
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@develop
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
