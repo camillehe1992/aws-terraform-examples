@@ -1,6 +1,6 @@
 # Host a React App on AWS Amplify
 
-The template provides source code to build a React application using AWS Amplify.
+The template provides source code to build a React application using AWS Amplify. A new build is triggered when there is a new commit pushed to remote branch.
 
 ## Terraform Structure
 
