@@ -47,6 +47,7 @@ env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   STATE_BUCKET: ${{ vars.STATE_BUCKET }}
   NICKNAME: ecs-cluster-on-ec2
+  TF_VERSION: 1.8.0
   # Inputs
   ENVIRONMENT: ${{ inputs.environment }}
   DESTROY: ${{ inputs.destroy }}
@@ -77,7 +78,9 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           role-session-name: ${{ env.ROLE_SESSION_NAME }}
           aws-region: ${{ env.AWS_REGION }}
-
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
