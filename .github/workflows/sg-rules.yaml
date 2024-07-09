@@ -18,11 +18,12 @@ on:
         default: false
         type: boolean
 
-run-name: ${{ format('Deploy to {0} (destroy = {1})', inputs.environment, inputs.destroy) }}
+run-name: Deploy to ${{ inputs.environment }} with destroy = ${{ inputs.destroy }}
 
 permissions:
   contents: read
   pull-requests: write
+  id-token: write
 
 jobs:
   plan:

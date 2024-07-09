@@ -18,7 +18,7 @@ on:
         default: false
         type: boolean
 
-run-name: ${{ format('Deploy to {0} (destroy = {1})', inputs.environment, inputs.destroy) }}
+run-name: Deploy to ${{ inputs.environment }} with destroy = ${{ inputs.destroy }}
 
 permissions:
   contents: read
@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   plan:
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@develop
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-plan-reusable.yaml@main
     secrets: inherit
     with:
       destroy: ${{ inputs.destroy }}
@@ -38,7 +38,7 @@ jobs:
   apply:
     needs: [plan]
     if: ${{ needs.plan.outputs.exitcode == 2 }}
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@develop
+    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}

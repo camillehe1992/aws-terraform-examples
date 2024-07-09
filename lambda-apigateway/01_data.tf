@@ -12,5 +12,5 @@ data "archive_file" "function_source" {
 }
 
 data "local_file" "openapi_spec" {
-  filename = var.openapi_json_file
+  filename = var.openapi_yaml_file
 }

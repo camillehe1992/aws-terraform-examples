@@ -40,17 +40,18 @@ run-name: ${{ format('Deploy to {0} with desired count {1} (destroy = {2})', inp
 permissions:
   contents: read
   pull-requests: write
+  id-token: write
 
 env:
   # Common Env Variables
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_ACCOUNT: ${{ vars.AWS_ACCOUNT }}
+  ROLE_TO_ASSUME: ${{ vars.ROLE_TO_ASSUME }}
+  ROLE_SESSION_NAME: ${{ vars.ROLE_SESSION_NAME }}
   AWS_REGION: ${{ vars.AWS_REGION }}
-  ENVIRONMENT: ${{ inputs.environment }}
-  NICKNAME: ecs-service-nginx
-  TF_VERSION: 1.4.2
   STATE_BUCKET: ${{ vars.STATE_BUCKET }}
+  NICKNAME: ecs-service-nginx
+  # Inputs
+  ENVIRONMENT: ${{ inputs.environment }}
+  DESTROY: ${{ inputs.destroy }}
   WORKING_DIRECTORY: ecs-service-nginx
   # Project Specific Env Variables
   DESIRED_COUNT: ${{ inputs.desired_count }}
@@ -70,21 +71,12 @@ jobs:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Install the latest version of the Terraform CLI
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-          terraform_version: ${{ env.TF_VERSION }}
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          role-session-name: ${{ env.ROLE_SESSION_NAME }}
           aws-region: ${{ env.AWS_REGION }}
-
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -107,29 +99,15 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
           export exitcode=0
-          terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
-          -var="aws_region=$AWS_REGION" \
-          -var="desired_count=$DESIRED_COUNT" \
-          -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+          if [ "$DESTROY" = "true" ]; then
+            echo "This is a destroy plan"
 
-          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-
-          if [ $exitcode -eq 1 ]; then
-            echo Terraform Plan Failed!
-            exit 1
+            terraform plan -destroy -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
+            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
           else
-            exit 0
+            terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
+            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
           fi
-
-      - name: Terraform Plan - Destroy
-        if: ${{ inputs.destroy == true }}
-        id: tf-plan-destroy
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: |
-          export exitcode=0
-          terraform plan -destroy -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
-          -var="aws_region=$AWS_REGION" \
-          -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
 
@@ -183,14 +161,6 @@ jobs:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-          terraform_version: ${{ env.TF_VERSION }}
-
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}

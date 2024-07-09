@@ -45,7 +45,7 @@ variable "retention_in_days" {
 }
 
 # API Gateway
-variable "openapi_json_file" {
+variable "openapi_yaml_file" {
   type        = string
   description = "The path of OpenAPI specification of API Gateway Rest API"
   default     = "swagger.yaml"
