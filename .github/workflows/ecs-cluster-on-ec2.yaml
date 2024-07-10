@@ -53,9 +53,9 @@ env:
   DESTROY: ${{ inputs.destroy }}
   # Project Specific Env Variables
   WORKING_DIRECTORY: ecs-cluster-on-ec2
-  DESIRED_SIZE: ${{ inputs.asg_desired_size }}
   # Terraform Variables are prefixed with TF_VAR
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+  TF_VAR_asg_desired_size: ${{ inputs.asg_desired_size }}
 
 jobs:
   plan-apply:
