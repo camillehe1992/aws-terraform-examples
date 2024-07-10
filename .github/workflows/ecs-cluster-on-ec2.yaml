@@ -103,15 +103,16 @@ jobs:
             export options=""
           fi
 
-          terraform plan $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -out tfplan -detailed-exitcode
-          exitcode=$?
-          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
+          terraform plan -detailed-exitcode $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -out tfplan
+          export exitcode=$?
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+
+          echo exitcode is $exitcode
 
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
           else
-            echo exitcode is $exitcode
             exit 0
           fi
 
