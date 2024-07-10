@@ -96,6 +96,7 @@ jobs:
         id: tf-plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
+          set +e
           if [ "$DESTROY" = "true" ]; then
             echo "This is a destroy plan"
             export options="-destroy"
@@ -104,10 +105,10 @@ jobs:
           fi
 
           terraform plan -detailed-exitcode $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -out tfplan
-          export exitcode=$?
-          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+          exitcode=$?
+          echo exitcode = $exitcode
 
-          echo exitcode is $exitcode
+          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
 
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
