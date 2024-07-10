@@ -135,7 +135,7 @@ jobs:
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+          echo "### Terraform Plan Output" >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
@@ -152,7 +152,7 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        # if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
+        if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
         id: tf-apply-string
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
@@ -160,7 +160,7 @@ jobs:
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "### Terraform Output" >> $GITHUB_OUTPUT
+          echo "### Terraform Apply Output" >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
