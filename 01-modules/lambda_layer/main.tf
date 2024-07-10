@@ -2,12 +2,12 @@ resource "null_resource" "pip_install" {
   count = var.pip_install ? 1 : 0
 
   triggers = {
-    shell_hash = "${sha256(file("${var.source_path}"))}"
+    shell_hash = sha256(file("${var.source_path}"))
     timestamp  = timestamp()
   }
 
   provisioner "local-exec" {
-    command = "rm -rf ${local.archive_path} && python3 -m pip install -r ${var.source_path} -t ${local.archive_path}/python"
+    command = "${path.module}/package.sh ${local.archive_path} ${local.runtime} ${local.platform}"
   }
 }
 

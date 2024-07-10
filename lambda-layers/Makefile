@@ -56,3 +56,8 @@ plan-destroy: init
 apply: init
 	$(info [*] Apply Terrafrom Infra)
 	@$(TF) apply tfplan
+
+deploy: init
+	$(info [*] Plan & Apply Terrafrom Infra)
+	@$(TF) plan $(OPTIONS) -out tfplan
+	@$(TF) apply tfplan
