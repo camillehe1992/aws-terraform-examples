@@ -3,6 +3,7 @@ resource "null_resource" "pip_install" {
 
   triggers = {
     shell_hash = file("${var.source_path}")
+    timestamp  = timestamp()
   }
   provisioner "local-exec" {
     working_dir = path.module
