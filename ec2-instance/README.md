@@ -1,6 +1,12 @@
 # Setup EC2 Instance on AWS
 
-A sample terraform project that used to demonstrate how to launch an EC2 instance with the given instance type and image architecture of the latest AMI.
+A sample terraform project that used to demonstrate how to launch Apache Web Server on an EC2 instance with the given instance type and image architecture of the latest AMI.
+
+After the EC2 instance is in running status, access Apache Web Server by opening the public IP address of our Amazon Linux 2 EC2 instance in a web browser.
+
+> Please be noted that the EC2 instance has been deleted.
+
+![apache-web-server](./images/apache-web-server.png)
 
 ## Terraform Structure
 
