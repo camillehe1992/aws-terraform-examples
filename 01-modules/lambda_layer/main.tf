@@ -2,12 +2,16 @@ resource "null_resource" "pip_install" {
   count = var.pip_install ? 1 : 0
 
   triggers = {
-    shell_hash = sha256(file("${var.source_path}"))
-    timestamp  = timestamp()
+    shell_hash = file("${var.source_path}")
   }
-
   provisioner "local-exec" {
-    command = "${path.module}/package.sh ${local.archive_path} ${local.runtime} ${local.platform}"
+    working_dir = path.module
+    interpreter = ["/bin/bash", "-c"]
+    command     = <<EOT
+      rm -rf ${local.archive_path}
+      rm -rf ${local.archive_path}.zip
+      pip install -r requirements.txt --platform ${local.platform} --only-binary=:all: -t ${local.archive_path}/python
+    EOT
   }
 }
 
