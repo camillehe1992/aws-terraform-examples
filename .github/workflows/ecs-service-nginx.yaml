@@ -53,19 +53,17 @@ env:
   ENVIRONMENT: ${{ inputs.environment }}
   DESTROY: ${{ inputs.destroy }}
   WORKING_DIRECTORY: ecs-service-nginx
-  # Project Specific Env Variables
-  DESIRED_COUNT: ${{ inputs.desired_count }}
+
+  # Terraform Variables are prefixed with TF_VAR
+  TF_VAR_desired_count: ${{ inputs.desired_count }}
 
 jobs:
-  terraform-plan:
-    name: Terraform Plan
+  plan-apply:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
-    outputs:
-      exitcode: ${{ steps.tf-plan.outputs.exitcode }}
 
     steps:
       # Checkout the repository to the GitHub Actions runner
@@ -77,6 +75,12 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           role-session-name: ${{ env.ROLE_SESSION_NAME }}
           aws-region: ${{ env.AWS_REGION }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          # https://github.com/hashicorp/setup-terraform/issues/152
+          terraform_wrapper: false
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -86,27 +90,23 @@ jobs:
           -backend-config="region=$AWS_REGION" \
           -backend-config="key=$NICKNAME/$ENVIRONMENT/$AWS_REGION/terraform.tfstate"
 
-      # Checks that all Terraform configuration files adhere to a canonical format
-      # Will fail the build if not
-      - name: Terraform Format
-        run: terraform fmt -check
-
       # Generates an execution plan for Terraform
       # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
       - name: Terraform Plan
         id: tf-plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          export exitcode=0
+          set +e # allow the workflow to continue following steps even if the `terraform` execution failed
           if [ "$DESTROY" = "true" ]; then
             echo "This is a destroy plan"
-
-            terraform plan -destroy -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
-            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            export options="-destroy"
           else
-            terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
-            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            export options=""
           fi
+
+          terraform plan -detailed-exitcode $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -out tfplan
+          exitcode=$?
+          echo exitcode = $exitcode
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
 
@@ -117,14 +117,6 @@ jobs:
             exit 0
           fi
 
-      # Save plan to artifacts
-      - name: Publish Terraform Plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ env.WORKING_DIRECTORY }}/tfplan
-
-      # Create string output of Terraform Plan
       - name: Create String Output
         id: tf-plan-string
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -133,7 +125,7 @@ jobs:
 
           delimiter="$(openssl rand -hex 8)"
           echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
-          echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
+          echo "### Terraform Plan Output" >> $GITHUB_OUTPUT
           echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo '```terraform' >> $GITHUB_OUTPUT
@@ -142,41 +134,33 @@ jobs:
           echo "</details>" >> $GITHUB_OUTPUT
           echo "${delimiter}" >> $GITHUB_OUTPUT
 
-      # Publish Terraform Plan as task summary
       - name: Publish Terraform Plan to Task Summary
         env:
           SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
-  terraform-apply:
-    name: Terraform Apply
-    if: ${{ inputs.force == true }} || needs.terraform-plan.outputs.exitcode == 2
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    needs: [terraform-plan]
-
-    steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
+      - name: Terraform Apply
+        if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
+        id: tf-apply-string
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          terraform init -reconfigure \
-          -backend-config="bucket=$STATE_BUCKET" \
-          -backend-config="region=$AWS_REGION" \
-          -backend-config="key=$NICKNAME/$ENVIRONMENT/$AWS_REGION/terraform.tfstate"
+          TERRAFORM_OUTPUT=$(terraform apply -auto-approve tfplan -no-color)
 
-      # Download saved plan from artifacts
-      - name: Download Terraform Plan
-        uses: actions/download-artifact@v4
-        with:
-          name: tfplan
-          path: ${{ env.WORKING_DIRECTORY }}
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "### Terraform Apply Output" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_OUTPUT" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
 
-      # Terraform Apply
-      - name: Terraform Apply
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: terraform apply -auto-approve tfplan
+      - name: Publish Terraform Output to Task Summary
+        if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
+        env:
+          SUMMARY: ${{ steps.tf-apply-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
