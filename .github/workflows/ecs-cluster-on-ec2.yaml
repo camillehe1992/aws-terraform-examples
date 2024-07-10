@@ -79,6 +79,8 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
+          # https://github.com/hashicorp/setup-terraform/issues/152
+          terraform_wrapper: false
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -101,17 +103,15 @@ jobs:
             export options=""
           fi
 
-          echo options = $options
-          terraform plan -detailed-exitcode $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -no-color -out tfplan
+          terraform plan $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -out tfplan -detailed-exitcode
           exitcode=$?
-
-          echo exitcode = $exitcode
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
 
           if [ $exitcode -eq 1 ]; then
             echo Terraform Plan Failed!
             exit 1
           else
+            echo exitcode is $exitcode
             exit 0
           fi
 
