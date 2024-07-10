@@ -48,11 +48,10 @@ env:
   STATE_BUCKET: ${{ vars.STATE_BUCKET }}
   NICKNAME: ecs-cluster-on-ec2
   TF_VERSION: 1.8.0
+  WORKING_DIRECTORY: ecs-cluster-on-ec2
   # Inputs
   ENVIRONMENT: ${{ inputs.environment }}
   DESTROY: ${{ inputs.destroy }}
-  # Project Specific Env Variables
-  WORKING_DIRECTORY: ecs-cluster-on-ec2
   # Terraform Variables are prefixed with TF_VAR
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
   TF_VAR_asg_desired_size: ${{ inputs.asg_desired_size }}
