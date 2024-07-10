@@ -51,7 +51,8 @@ init: check-env
 
 plan: init
 	$(info [*] Plan Terrafrom Infra)
-	@$(TF) plan $(OPTIONS) -out tfplan
+	@$(TF) plan $(OPTIONS) -out tfplan -detailed-exitcode
+	@$(info $(shell echo $?))
 
 plan-destroy: init
 	$(info [*] Plan Terrafrom Infra - Destroy)
