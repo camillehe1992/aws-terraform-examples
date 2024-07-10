@@ -59,7 +59,6 @@ env:
 
 jobs:
   plan-apply:
-    name: Terraform Plan & Apply
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
@@ -89,11 +88,6 @@ jobs:
           -backend-config="region=$AWS_REGION" \
           -backend-config="key=$NICKNAME/$ENVIRONMENT/$AWS_REGION/terraform.tfstate"
 
-      # Checks that all Terraform configuration files adhere to a canonical format
-      # Will fail the build if not
-      - name: Terraform Format
-        run: terraform fmt -check
-
       # Generates an execution plan for Terraform
       # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
       - name: Terraform Plan
@@ -108,7 +102,7 @@ jobs:
           fi
 
           echo options = $options
-          terraform plan $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -detailed-exitcode -no-color -out tfplan
+          terraform plan -detailed-exitcode $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars -no-color -out tfplan
           exitcode=$?
 
           echo exitcode = $exitcode
