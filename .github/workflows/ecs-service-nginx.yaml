@@ -53,8 +53,8 @@ env:
   ENVIRONMENT: ${{ inputs.environment }}
   DESTROY: ${{ inputs.destroy }}
   WORKING_DIRECTORY: ecs-service-nginx
-
   # Terraform Variables are prefixed with TF_VAR
+  TF_VAR_aws_region: ${{ vars.AWS_REGION }}
   TF_VAR_desired_count: ${{ inputs.desired_count }}
 
 jobs:
