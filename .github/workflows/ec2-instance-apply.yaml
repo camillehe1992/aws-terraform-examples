@@ -37,7 +37,7 @@ jobs:
 
   apply:
     needs: [plan]
-    if: ${{ needs.plan.outputs.exitcode == 2 }}
+    # if: ${{ needs.plan.outputs.exitcode == 2 }}
     uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
     secrets: inherit
     with:

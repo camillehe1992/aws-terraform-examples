@@ -51,22 +51,20 @@ env:
   # Inputs
   ENVIRONMENT: ${{ inputs.environment }}
   DESTROY: ${{ inputs.destroy }}
-  WORKING_DIRECTORY: ecs-cluster-on-ec2
   # Project Specific Env Variables
+  WORKING_DIRECTORY: ecs-cluster-on-ec2
   DESIRED_SIZE: ${{ inputs.asg_desired_size }}
   # Terraform Variables are prefixed with TF_VAR
   TF_VAR_aws_region: ${{ vars.AWS_REGION }}
 
 jobs:
-  plan:
-    name: Terraform Plan
+  plan-apply:
+    name: Terraform Plan & Apply
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
-    outputs:
-      exitcode: ${{ steps.tf-plan.outputs.exitcode }}
 
     steps:
       # Checkout the repository to the GitHub Actions runner
@@ -128,13 +126,6 @@ jobs:
           name: tfplan
           path: ${{ env.WORKING_DIRECTORY }}/tfplan
 
-      # Save  ecs-container-draining.zip to artifacts
-      - name: Publish ecs-container-draining.zip
-        uses: actions/upload-artifact@v4
-        with:
-          name: ecs-container-draining.zip
-          path: ${{ env.WORKING_DIRECTORY }}/ecs-container-draining.zip
-
       # Create string output of Terraform Plan
       - name: Create String Output
         id: tf-plan-string
@@ -160,12 +151,26 @@ jobs:
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
-  apply:
-    needs: [plan]
-    uses: camillehe1992/reusable-workflows/.github/workflows/terraform-apply-reusable.yaml@main
-    secrets: inherit
-    with:
-      environment: ${{ inputs.environment }}
-      nickname: ecs-cluster-on-ec2
-      packages-directory: ecs-cluster-on-ec2
-      working-directory: ecs-cluster-on-ec2
+      - name: Terraform Apply
+        if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
+        id: tf-apply-string
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+          TERRAFORM_OUTPUT=$(terraform apply -auto-approve tfplan -no-color)
+
+          delimiter="$(openssl rand -hex 8)"
+          echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
+          echo "### Terraform Output" >> $GITHUB_OUTPUT
+          echo "<details><summary>Click to expand</summary>" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo '```terraform' >> $GITHUB_OUTPUT
+          echo "$TERRAFORM_OUTPUT" >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo "</details>" >> $GITHUB_OUTPUT
+          echo "${delimiter}" >> $GITHUB_OUTPUT
+
+      - name: Publish Terraform Output to Task Summary
+        env:
+          SUMMARY: ${{ steps.tf-apply-string.outputs.summary }}
+        run: |
+          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
