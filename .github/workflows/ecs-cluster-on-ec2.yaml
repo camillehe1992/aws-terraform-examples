@@ -76,7 +76,7 @@ jobs:
           role-to-assume: ${{ env.ROLE_TO_ASSUME }}
           role-session-name: ${{ env.ROLE_SESSION_NAME }}
           aws-region: ${{ env.AWS_REGION }}
-      - uses: hashicorp/setup-terraform@v3
+      - uses: Setup Terraform
         with:
           terraform_version: ${{ env.TF_VERSION }}
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
@@ -99,16 +99,18 @@ jobs:
         id: tf-plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          export exitcode=0
           if [ "$DESTROY" = "true" ]; then
             echo "This is a destroy plan"
-
-            terraform plan -destroy -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
-            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            export options="-destroy"
           else
-            terraform plan -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
-            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+            export options=""
           fi
+
+          echo options = $options
+
+          export exitcode=0
+          terraform plan $options -var-file $(pwd)/tf_$ENVIRONMENT.tfvars \
+            -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
 
