@@ -152,7 +152,7 @@ jobs:
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
-        if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
+        # if: ${{ steps.tf-plan.outputs.exitcode == 2 }}
         id: tf-apply-string
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
