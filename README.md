@@ -20,17 +20,17 @@ Then, make symlinks for `tfenv/bin/*` scripts into a path that is already added 
 sudo ln -s ~/.tfenv/bin/* /usr/local/bin
 ```
 
-Open another terminal, and run `tfenv -v` to check if the installation works. Finally, install Terrafrom version you required using command `tfenv install x.x.x`. In this repo, I use Terraform version `1.4.2`, so run below command to install `1.4.2`.
+Open another terminal, and run `tfenv -v` to check if the installation works. Finally, install Terrafrom version you required using command `tfenv install x.x.x`. In this repo, I use Terraform version `1.8.0`, so run below command to install `1.8.0`.
 
 ```bash
-tfenv install 1.4.2
+tfenv install 1.8.0
 
-# Switch to use 1.4.2
-tfenv use 1.4.2
+# Switch to use 1.8.0
+tfenv use 1.8.0
 
 # validate current Terraform version
 terraform -v
-# Terraform v1.4.2
+# Terraform v1.8.0
 # on darwin_arm64
 ```
 
