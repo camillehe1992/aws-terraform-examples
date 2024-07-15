@@ -83,19 +83,12 @@ In the repo, I use GitHub Actions to deploy Terraform project into AWS account. 
 
 Firstly, under `Settings` -> `Environments`, create an environment named `dev`. Then create two secrets and three variables in `dev` environment. These tokens will be injected into workflow build.
 
-Secrets:
-
-```yaml
-# The AKSK of the IAM user you created to deploy Terraform resources in previous step.
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
-```
-
 Variables:
 
 ```yaml
+ROLE_TO_ASSUME
+ROLE_SESSION_NAME
 AWS_REGION
-AWS_ACCOUNT
 # The bucket name of the Terraform remote s3 backend. The S3 bucket must exist.
 STATE_BUCKET
 ```
